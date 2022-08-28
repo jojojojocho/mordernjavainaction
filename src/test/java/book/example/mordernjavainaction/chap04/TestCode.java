@@ -77,34 +77,34 @@ public class TestCode {
     @DisplayName("For-each를 사용하는 외부 반복")
     @Test
     public void useForeach() {
-        List<String> names = new ArrayList<>(); // 요리의 이름들을 담을 리스트
+        List<String> dishNames = new ArrayList<>(); // 요리의 이름들을 담을 리스트
         for (Dish dish : menu) {
-            names.add(dish.getName());      // 요리의 이름들을 names 리스트에 담음.
+            dishNames.add(dish.getName());      // 요리의 이름들을 dishNames 리스트에 담음.
         }
-        names.stream().forEach(System.out::println);    //names를 순회하면서 이름을 출력
+        dishNames.stream().forEach(System.out::println);    //dishNames 순회하면서 이름을 출력
     }
 
     @DisplayName("Iterator 객체를 사용하는 외부 반복")
     @Test
     public void useIterator() {
-        List<String> names = new ArrayList<>();     //For-each를 사용하는 외부 반복과 동일
+        List<String> dishNames = new ArrayList<>(); //For-each를 사용하는 외부 반복과 동일
         Iterator<Dish> iterator = menu.iterator();  //menu로 부터 iterator를 가져옴.
 
         while (iterator.hasNext()) {
             Dish dish = iterator.next();
-            names.add(dish.getName());          //iterator를 이용해 dish의 이름을 names리스트에 담음.
+            dishNames.add(dish.getName());          //iterator를 이용해 dish의 이름을 dishNames 리스트에 담음.
         }
-        names.stream().forEach(System.out::println);        //dish의 이름을 출력 (For-each를 통한 외부반복과 결과가 같음.)
+        dishNames.stream().forEach(System.out::println);//dish의 이름을 출력 (For-each를 통한 외부반복과 결과가 같음.)
     }
 
     @DisplayName("스트림을 이용한 내부 반복")
     @Test
     public void useStream() {
         //stream을 이용한 내부반복 -> 선언형이라 가독성이 높다.
-        List<String> names = menu.stream()      //menu 스트림 생성.
+        List<String> dishNames = menu.stream()      //menu 스트림 생성.
                 .map(Dish::getName)         //dish 객체를 dish.getname의 리턴값으로 매핑해준다.
                 .collect(toList());         //리스트로 collect
-        names.stream()
+        dishNames.stream()
                 .forEach(System.out::println);// name를 순회하면서 각 요소의 이름을 출력
     }
 
