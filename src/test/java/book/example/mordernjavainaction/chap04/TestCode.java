@@ -1,11 +1,13 @@
 package book.example.mordernjavainaction.chap04;
 
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.*;
@@ -49,6 +51,12 @@ public class TestCode {
             lowCaloricDishName.add(dish.getName());
         }
         //결과 : 칼로리 오름차순으로 정렬된 lowCaloricDish가 만들어짐.
+        lowCaloricDishName.stream().forEach(ascDishName -> System.out.println("***dishName(ASC) : " + ascDishName));
+        //***dishName(ASC) : season fruit
+        //***dishName(ASC) : prawns
+        //***dishName(ASC) : rice
+
+        Assertions.assertThat(lowCaloricDishName.stream().count()).isEqualTo(3);
     }
 
     @DisplayName("자바 8코드")
@@ -59,58 +67,84 @@ public class TestCode {
                 .sorted(comparing(Dish::getCalories))  //칼로리를 기준으로 오름차순 정렬 (칼로리로 요리 정렬)
                 .map(dish -> dish.getName()) // dish -> dish.getName (요리명 추출)
                 .collect(toList()); // 리스트로 collect (모든 요리명을 리스트에 저장)
+
+        lowCaloricDishesName.stream().
+                forEach(dishName -> System.out.println("***dishName(ASC) : " + dishName));
+        //***dishName(ASC) : season fruit
+        //***dishName(ASC) : prawns
+        //***dishName(ASC) : rice
+
+        Assertions.assertThat(lowCaloricDishesName.stream().count()).isEqualTo(3);
     }
 
-<<<<<<< HEAD
 
-
-=======
     @DisplayName("스트림은 단 한번만 소비 될 수 있다!!")
     @Test
-    public void repeatOnce() {
+    public void operatingOnlyOnceStream() {
         List<String> company = Arrays.asList("Apple", "Samsung", "LG", "Asus"); //회사이름들
         Stream<String> stream = company.stream();   // Sequence Of Elements (연속된 요소) 의 스트림
         stream.forEach(System.out::println);        //첫번째 순회 -> 제대로 작동
-        stream.forEach(System.out::println);        // 두번째 순회 -> 이미 한번 돌았기 때문에 정상작동하지 않음.
+        //java.lang.IllegalStateException: stream has already been operated upon or closed
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
+                () -> {
+                    stream.forEach(System.out::println);  //두번째 순회 -> 이미 한번 돌았기 때문에 정상작동하지 않음.
+                }, "예외가 발생하지 않았습니다.. 테스트 fail!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     @DisplayName("For-each를 사용하는 외부 반복")
     @Test
     public void useForeach() {
-        List<String> names = new ArrayList<>(); // 요리의 이름들을 담을 리스트
+        List<String> dishNames = new ArrayList<>(); // 요리의 이름들을 담을 리스트
         for (Dish dish : menu) {
-            names.add(dish.getName());      // 요리의 이름들을 names 리스트에 담음.
+            dishNames.add(dish.getName());      // 요리의 이름들을 dishNames 리스트에 담음.
         }
-        names.stream().forEach(System.out::println);    //names를 순회하면서 이름을 출력
+        AtomicInteger index = new AtomicInteger();
+        dishNames.stream().forEach(
+                dishname -> Assertions.assertThat(menu.get(index.getAndIncrement()).getName()).isEqualTo(dishname)   //dishNames를 순회하면서 이름을 출력
+        );
+//        for (int i =0; i<menu.size(); i++){
+//            Assertions.assertThat(menu.get(i).getName()).isEqualTo(dishNames.get(i));
+//        }
+
     }
 
     @DisplayName("Iterator 객체를 사용하는 외부 반복")
     @Test
     public void useIterator() {
-        List<String> names = new ArrayList<>();     //For-each를 사용하는 외부 반복과 동일
+        List<String> dishNames = new ArrayList<>();     //For-each를 사용하는 외부 반복과 동일
         Iterator<Dish> iterator = menu.iterator();  //menu로 부터 iterator를 가져옴.
 
         while (iterator.hasNext()) {
             Dish dish = iterator.next();
-            names.add(dish.getName());          //iterator를 이용해 dish의 이름을 names리스트에 담음.
+            dishNames.add(dish.getName());          //iterator를 이용해 dish의 이름을 names리스트에 담음.
         }
-        names.stream().forEach(System.out::println);        //dish의 이름을 출력 (For-each를 통한 외부반복과 결과가 같음.)
+        dishNames.stream().forEach(System.out::println);        //dish의 이름을 출력 (For-each를 통한 외부반복과 결과가 같음.)
+
+//        AtomicInteger index = new AtomicInteger();
+        final int[] index = {0};
+        dishNames.stream().forEach(dishname -> {
+            Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);
+            System.out.println(dishname);//dishNames를 순회하면서 이름을 출력
+        });
     }
 
     @DisplayName("스트림을 이용한 내부 반복")
     @Test
     public void useStream() {
         //stream을 이용한 내부반복 -> 선언형이라 가독성이 높다.
-        List<String> names = menu.stream()      //menu 스트림 생성.
+        List<String> dishNames = menu.stream()      //menu 스트림 생성.
                 .map(Dish::getName)         //dish 객체를 dish.getname의 리턴값으로 매핑해준다.
                 .collect(toList());         //리스트로 collect
-        names.stream()
-                .forEach(System.out::println);// name를 순회하면서 각 요소의 이름을 출력
-    }
->>>>>>> parent of ae46b0a (.)
+        dishNames.stream()
+                .forEach(System.out::println);// dishNames를 순회하면서 각 요소의 이름을 출력
 
-<<<<<<< .merge_file_a14976
-=======
+//        AtomicInteger index = new AtomicInteger();
+        final int[] index = {0};
+        dishNames.parallelStream().forEach(dishname -> {
+                    Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);   //dishNames를 순회하면서 이름을
+                });
+    }
+
     @DisplayName("외부반복을 내부반복으로 변환(외부반복코드)")
     @Test
     public void externalIterator(){
@@ -123,6 +157,8 @@ public class TestCode {
             }
         }
         highCaloriDishes.stream().forEach(System.out::println); // highCaloriDishes 리스트에 있는 요리의 이름들을 출력
+
+
     }
 
     @DisplayName("외부반복을 내부반복으로 변환(내부반복코드)")
@@ -139,11 +175,13 @@ public class TestCode {
     @DisplayName("스트림 연산")
     @Test
     public void streamOperation(){
-        List<String> names = menu.stream()
+        List<String> dishNames = menu.stream()
                 .filter(dish -> dish.getCalories() > 300)   // 중간연산 (Intermediate Operation)
                 .map(Dish::getName)             // 중간연산 (Intermediate Operation)
                 .limit(3)               // 중간연산 (Intermediate Operation)
                 .collect(toList());             // 최종연산 (Termimal Operation)
+
+        Assertions.assertThat(dishNames.stream().count()).isEqualTo(3);
     }
     // 중간연산은 다른 스트림을 반환 -> 따라서 중간연산을 이용해 질의를 작성 가능하다.
     // 중간연산의 중요한 특징은 최종 단말연산을 스트림파이프라인에 실행하기 전까지는 아무연산도 수행하지 않는다. -> 즉 lazy Operation 이다.
@@ -151,7 +189,7 @@ public class TestCode {
     @DisplayName("스트림 중간연산 확인해보기")
     @Test
     public void intermediateOperation(){
-        List<String> names = menu.stream()
+        List<String> dishNames = menu.stream()
                 .filter(dish -> {
                     System.out.println("filtering : " + dish.getName()); //스트림은 최종연산에서 모든 연산이 몰아서 처리되기 때문에 이때 출력 x
                     return dish.getCalories() > 300;
@@ -162,21 +200,22 @@ public class TestCode {
                 })
                 .limit(3)
                 .collect(toList());                                 //최종연산인 이 때 모든 연산이 처리 되면서 출력문도 같이 출력된다.
-        System.out.println(names);
+        System.out.println(dishNames);
+        Assertions.assertThat(dishNames.stream().count()).isEqualTo(3);
     }
 
     @DisplayName("스트림 중간연산과 최종연산 이해도 확인 (중간연산과 최종연산 구분해보기)")
     @Test
     public void intermediateAndTerminalOperation(){
-        long overThreeHundredsCal = menu.stream()
+        long overThreeHundredsCalDish = menu.stream()
                 .filter(dish -> dish.getCalories() > 300)   //중간연산
                 .distinct()                                 //중간연산
                 .limit(3)                            //중간연산
                 .count();                                   //최종연산
-        System.out.println(overThreeHundredsCal);           //칼로리 300 넘는 요리의 숫자 출력
-    }
+        System.out.println(overThreeHundredsCalDish);           //칼로리 300 넘는 요리의 숫자 출력
 
->>>>>>> .merge_file_a12036
+        Assertions.assertThat(overThreeHundredsCalDish).isEqualTo(3);
+    }
 }
 
 
