@@ -109,6 +109,74 @@ public class TestCode {
     }
 >>>>>>> parent of ae46b0a (.)
 
+<<<<<<< .merge_file_a14976
+=======
+    @DisplayName("외부반복을 내부반복으로 변환(외부반복코드)")
+    @Test
+    public void externalIterator(){
+        List<String> highCaloriDishes = new ArrayList<>(); //조건에 해당하는 String을 담을 리스트변수
+        Iterator<Dish> iterator = menu.iterator();  //menu로 부터 iterator를 가져온다
+        while (iterator.hasNext()){
+            Dish dish = iterator.next();
+            if(dish.getCalories() > 300){
+                highCaloriDishes.add(dish.getName());       //칼로리가 300보다 큰 요리들을 highCaloriDishes에 추가
+            }
+        }
+        highCaloriDishes.stream().forEach(System.out::println); // highCaloriDishes 리스트에 있는 요리의 이름들을 출력
+    }
+
+    @DisplayName("외부반복을 내부반복으로 변환(내부반복코드)")
+    @Test
+    public void  internalIterator(){
+        List<String> highCaloriDishes = menu.stream()   //요리의 스트림을 가져온다
+                .filter(dish -> dish.getCalories() > 300)   // 요리의 스트림에서 요리의 칼로리가 300이 넘는 요리들만 필터링
+                .map(dish -> dish.getName())        //필터링 된 요리객체를 요리 이름으로 매핑
+                .collect(toList());         //리스트로 collect
+
+        highCaloriDishes.stream().forEach(System.out::println);  //highCaloriDishes 를 출력
+    }
+
+    @DisplayName("스트림 연산")
+    @Test
+    public void streamOperation(){
+        List<String> names = menu.stream()
+                .filter(dish -> dish.getCalories() > 300)   // 중간연산 (Intermediate Operation)
+                .map(Dish::getName)             // 중간연산 (Intermediate Operation)
+                .limit(3)               // 중간연산 (Intermediate Operation)
+                .collect(toList());             // 최종연산 (Termimal Operation)
+    }
+    // 중간연산은 다른 스트림을 반환 -> 따라서 중간연산을 이용해 질의를 작성 가능하다.
+    // 중간연산의 중요한 특징은 최종 단말연산을 스트림파이프라인에 실행하기 전까지는 아무연산도 수행하지 않는다. -> 즉 lazy Operation 이다.
+
+    @DisplayName("스트림 중간연산 확인해보기")
+    @Test
+    public void intermediateOperation(){
+        List<String> names = menu.stream()
+                .filter(dish -> {
+                    System.out.println("filtering : " + dish.getName()); //스트림은 최종연산에서 모든 연산이 몰아서 처리되기 때문에 이때 출력 x
+                    return dish.getCalories() > 300;
+                })
+                .map(dish -> {
+                    System.out.println("mapping : " + dish.getName());  //스트림은 최종연산에서 모든 연산이 몰아서 처리되기 때문에 이때 출력 x
+                    return dish.getName();
+                })
+                .limit(3)
+                .collect(toList());                                 //최종연산인 이 때 모든 연산이 처리 되면서 출력문도 같이 출력된다.
+        System.out.println(names);
+    }
+
+    @DisplayName("스트림 중간연산과 최종연산 이해도 확인 (중간연산과 최종연산 구분해보기)")
+    @Test
+    public void intermediateAndTerminalOperation(){
+        long overThreeHundredsCal = menu.stream()
+                .filter(dish -> dish.getCalories() > 300)   //중간연산
+                .distinct()                                 //중간연산
+                .limit(3)                            //중간연산
+                .count();                                   //최종연산
+        System.out.println(overThreeHundredsCal);           //칼로리 300 넘는 요리의 숫자 출력
+    }
+
+>>>>>>> .merge_file_a12036
 }
 
 
