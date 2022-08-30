@@ -81,8 +81,8 @@ public class TestCode {
     @DisplayName("스트림은 단 한번만 소비 될 수 있다!!")
     @Test
     public void operatingOnlyOnceStream() {
-        List<String> company = Arrays.asList("Apple", "Samsung", "LG", "Asus"); //회사이름들
-        Stream<String> stream = company.stream();   // Sequence Of Elements (연속된 요소) 의 스트림
+        List<String> companys = Arrays.asList("Apple", "Samsung", "LG", "Asus"); //회사이름들
+        Stream<String> stream = companys.stream();   // Sequence Of Elements (연속된 요소) 의 스트림
         stream.forEach(System.out::println);        //첫번째 순회 -> 제대로 작동
         //java.lang.IllegalStateException: stream has already been operated upon or closed
         org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
