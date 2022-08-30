@@ -129,9 +129,10 @@ public class TestCode {
                 .forEach(System.out::println);// dishNames를 순회하면서 각 요소의 이름을 출력
 
 //        AtomicInteger index = new AtomicInteger();
+        //람다식 안에서는 final 형태 즉, 변하지 않는 변수만 선언이 가능하므로 AtomicInteger 또는 배열을 사용하여 값을 변경.
         final int[] index = {0};
         dishNames.parallelStream().forEach(dishname -> {
-                    Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);   //dishNames를 순회하면서 이름을
+                    Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);   //순회하면서 검증
                 });
     }
 
@@ -162,6 +163,9 @@ public class TestCode {
         highCaloriDishes.stream().forEach(System.out::println);  //highCaloriDishes 를 출력
     }
 
+
+    // 중간연산은 다른 스트림을 반환 -> 따라서 중간연산을 이용해 질의를 작성 가능하다.
+    // 중간연산의 중요한 특징은 최종 단말연산을 스트림파이프라인에 실행하기 전까지는 아무연산도 수행하지 않는다. -> 즉 lazy Operation 이다.
     @DisplayName("스트림 연산")
     @Test
     public void streamOperation(){
@@ -173,8 +177,7 @@ public class TestCode {
 
         Assertions.assertThat(dishNames.stream().count()).isEqualTo(3);
     }
-    // 중간연산은 다른 스트림을 반환 -> 따라서 중간연산을 이용해 질의를 작성 가능하다.
-    // 중간연산의 중요한 특징은 최종 단말연산을 스트림파이프라인에 실행하기 전까지는 아무연산도 수행하지 않는다. -> 즉 lazy Operation 이다.
+
 
     @DisplayName("스트림 중간연산 확인해보기")
     @Test
