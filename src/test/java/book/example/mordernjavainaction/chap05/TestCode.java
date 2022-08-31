@@ -158,7 +158,6 @@ public class TestCode {
      * 해결 방법 : stream - filter - limit - collect
      * 에상되는 결과 값 : 300칼로리 이상의 요리로 이루어진 size가 N 개인 리스트
      * 검증 : 1. 리스트 각 요소별로 300칼로리 이상인지 확인,
-     *       2. 사이즈가 N개 인지 확인
      */
     @DisplayName("스트림 축소")
     @Test
@@ -176,8 +175,9 @@ public class TestCode {
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
         dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
-        //리스트의 사이즈가 N인지 확인.
-        Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
+        dishes.stream().forEach(dish -> System.out.println(dish.getName()));
     }
+
+
 
 }
