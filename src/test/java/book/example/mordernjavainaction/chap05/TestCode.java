@@ -13,6 +13,13 @@ import java.util.stream.Collectors;
 public class TestCode {
 
     List<Dish> menu = new Dish().makeDishes();
+    List<Dish> specialMenu = Arrays.asList(
+            new Dish("seasonal fruit" , true , 120, Dish.Type.OTHER),
+            new Dish("prawns" , false, 300, Dish.Type.FISH),
+            new Dish("rice" , true, 350, Dish.Type.OTHER),
+            new Dish("chicken" , false, 400, Dish.Type.MEAT),
+            new Dish("french fries" , true, 530, Dish.Type.OTHER)
+    );
 
     /**
      * 데이터 컬렉션 반복을 명시적으로 관리하는 외부 반복코드와 내부 반복 코드 비교
@@ -47,6 +54,12 @@ public class TestCode {
     }
 
 
+    /**
+     * 요구사항(문제) : 채식인 것을 필터링
+     * 해결방법 : 스트림 - filter - collect를 사용 한다.
+     * 예상되는 결과 값과 타입 : 채식인 것들이 걸러진 리스트.
+     * 검증 : 마지막에 반환 된 리스트의 요소들이 채식인지 개별 확인.
+     */
     @DisplayName("프레디 케이트로 필터링")
     @Test
     public void usePredicateFilteringMethod(){
@@ -60,7 +73,13 @@ public class TestCode {
         vegitarianMenu.stream().forEach(dish -> Assertions.assertThat(dish.isVegetarian()).isEqualTo(true));
     }
 
-    
+
+    /**
+     * 요구사항(문제) : 리스트 안에 있는 짝수를 구하고, 중복된 값을 제거 해라.
+     * 해결방법 : stream - filter - distinct - collect
+     * 예상 되는 결과 값과 타입 : 각 요소들이 unique한 짝수로 이루어진 리스트
+     * 검증 : 최초 리스트의 짝수의 count와 결과 리스트의 짝수 카운트를 비교.
+     */
     @DisplayName("고유 요소 필터링")
     @Test
     public void useUniqueElementFilteringMethod(){
@@ -79,9 +98,87 @@ public class TestCode {
         Assertions.assertThat(uniqueEvenNumberList.size()).isEqualTo(2);
     }
 
-    
+    /**
+     * 5.2.1 : 프레디 케이트를 이용한 슬라이싱
+     * 요구사항(문제) : dish 객체로 이루어진 정렬된 리스트 안의 요소 중 320칼로리 이하의 요리만 필터링 해라.
+     * 해결 방법 : stream - takeWhile - collect
+     * 예상되는 결과값 : 320칼로리 이하의 dish로 이루어진 리스트.
+     * 검증 : 결과 리스트의 각 요소 별로 칼로리가 320이하 인지 개별 확인.
+     */
+    @DisplayName("takeWhile을 사용 한 슬라이싱")
+    @Test
+    public void useTakeWhileSlicingMeThod(){
+
+        //when
+        //filter를 이용한 필터링 코드
+        List<Dish> filteredMenu = specialMenu.stream()
+                .filter(dish -> dish.getCalories() < 320)
+                .collect(Collectors.toList());
+
+        //takeWhile을 이용한 슬라이싱 코드
+        List<Dish> slicedMenu = specialMenu.stream()
+                .takeWhile(dish -> dish.getCalories()<320)
+                .collect(Collectors.toList());
+
+        //then
+        // 각 요소가 320이하 칼로리인지 검증.
+        slicedMenu.stream().forEach(d -> Assertions.assertThat(d.getCalories() < 320));
+    }
+
+    /**
+     * 5.2.1 : 프레디 케이트를 이용한 슬라이싱
+     * 요구사항(문제) : dish 객체로 이루어진 정렬된 리스트 안의 요소 중 320칼로리 이상의 요리만 필터링 해라.
+     * 해결 방법 : stream - dropWhile - collect
+     * 예상되는 결과값 : 320칼로리 이하의 dish로 이루어진 리스트.
+     * 검증 : 결과 리스트의 각 요소 별로 칼로리가 320이상 인지 개별 확인.
+     */
+    @DisplayName("dropWhile을 사용 한 슬라이싱")
+    @Test
+    public void useDropWhileSlicingMeThod(){
+
+        //when
+        //filter를 이용한 필터링 코드
+        List<Dish> filteredMenu = specialMenu.stream()
+                .filter(dish -> dish.getCalories() < 320)
+                .collect(Collectors.toList());
+
+        //dropWhile을 이용한 슬라이싱 코드
+        List<Dish> slicedMenu = specialMenu.stream()
+                .dropWhile(dish -> dish.getCalories()<320)
+                .collect(Collectors.toList());
+
+        //then
+        // 각 요소가 320이상 칼로리인지 검증.
+        slicedMenu.stream().forEach(d -> Assertions.assertThat(d.getCalories() > 320));
+    }
 
 
+    /**
+     * 5.2.2 스트림 축소
+     * 요구사항(문제) : 정렬된 dish 객체 List에서 300칼로리 이상의 요리들 중 요소 n개를 반환
+     * 해결 방법 : stream - filter - limit - collect
+     * 에상되는 결과 값 : 300칼로리 이상의 요리로 이루어진 size가 N 개인 리스트
+     * 검증 : 1. 리스트 각 요소별로 300칼로리 이상인지 확인,
+     *       2. 사이즈가 N개 인지 확인
+     */
+    @DisplayName("스트림 축소")
+    @Test
+    public void useLimit(){
 
+        int N = 3; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
+
+        //when
+        //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
+        List<Dish> dishes = specialMenu.stream()
+                .filter(dish-> dish.getCalories() > 300)
+                .limit(N)
+                .collect(Collectors.toList());
+
+        //then
+        //리스트의 각 요소들이 300칼로리 이상인지 확인
+        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
+        //리스트의 사이즈가 N인지 확인.
+        Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
+    }
 
 }
