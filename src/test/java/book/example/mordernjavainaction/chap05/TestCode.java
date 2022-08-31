@@ -98,9 +98,6 @@ public class TestCode {
         Assertions.assertThat(uniqueEvenNumberList.size()).isEqualTo(2);
     }
 
-<<<<<<< HEAD
-
-=======
     /**
      * 5.2.1 : 프레디 케이트를 이용한 슬라이싱
      * 요구사항(문제) : dish 객체로 이루어진 정렬된 리스트 안의 요소 중 320칼로리 이하의 요리만 필터링 해라.
@@ -111,7 +108,6 @@ public class TestCode {
     @DisplayName("takeWhile을 사용 한 슬라이싱")
     @Test
     public void useTakeWhileSlicingMeThod(){
->>>>>>> 1ae852699feb00ac3329ac050619a1de7e7cc755
 
         //when
         //filter를 이용한 필터링 코드
