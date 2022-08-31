@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class TestCode {
 
     List<Dish> menu = new Dish().makeDishes();
@@ -85,7 +86,7 @@ public class TestCode {
     public void useUniqueElementFilteringMethod(){
         //given
         List<Integer> numbers = Arrays.asList(1,2,1,3,3,2,4);
-        
+
         //when
         //짝수일 경우에만 필터링 후 중복제거하여 리스트로 만듬.
         List<Integer> uniqueEvenNumberList = numbers.stream()
@@ -170,15 +171,41 @@ public class TestCode {
         //when
         //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
         List<Dish> dishes = specialMenu.stream()
-                .filter(dish-> dish.getCalories() > 300)
+                .filter(dish-> dish.getCalories() >= 300)
                 .limit(N)
                 .collect(Collectors.toList());
 
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
-        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
+        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() >= 300));
+        dishes.stream().forEach(dish -> System.out.println(dish.getName()));
+
         //리스트의 사이즈가 N인지 확인.
         Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
+    }
+
+    /**
+     * 5.2.3 요소 건너 뛰기
+     * 요구사항 (문제) : 300칼로리 이상의 처음 두 요리를 건너 뛴 다음에 300칼로리가 넘는 나머지 요리를 반환.
+     * 해결 방법 : stream - filter - skip - collect
+     * 예상되는 결과 값과 타입 : 300칼로리 이상의 요리 중 앞의 2개를 뺀 나머지 300칼로리 이상의 요리 리스트
+     * 검증 : filter만 걸었을 때의 길이와 skip을 했을 때의 길이 차이로 검증 시도.
+     */
+    @DisplayName("요소 건너뛰기")
+    @Test
+    public void useSkip(){
+        long n = 2;
+
+        //when
+        List<Dish> dishes = menu.stream().filter(dish -> dish.getCalories() > 300)
+                .skip(n)
+                .collect(Collectors.toList());
+
+        //then
+        Assertions.assertThat(dishes.stream()
+                .filter(dish -> dish.getCalories() > 300)
+                .count()).isEqualTo(dishes.size()-n);
+
     }
 
 }
