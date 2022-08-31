@@ -79,7 +79,7 @@ public class TestCode {
         Assertions.assertThat(uniqueEvenNumberList.size()).isEqualTo(2);
     }
 
-    
+
 
 
 
