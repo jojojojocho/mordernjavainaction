@@ -15,11 +15,11 @@ public class TestCode {
 
     List<Dish> menu = new Dish().makeDishes();
     List<Dish> specialMenu = Arrays.asList(
-            new Dish("seasonal fruit" , true , 120, Dish.Type.OTHER),
-            new Dish("prawns" , false, 300, Dish.Type.FISH),
-            new Dish("rice" , true, 350, Dish.Type.OTHER),
-            new Dish("chicken" , false, 400, Dish.Type.MEAT),
-            new Dish("french fries" , true, 530, Dish.Type.OTHER)
+            new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
+            new Dish("prawns", false, 300, Dish.Type.FISH),
+            new Dish("rice", true, 350, Dish.Type.OTHER),
+            new Dish("chicken", false, 400, Dish.Type.MEAT),
+            new Dish("french fries", true, 530, Dish.Type.OTHER)
     );
 
     /**
@@ -28,16 +28,16 @@ public class TestCode {
      */
     @DisplayName("외부 반복 코드와 내부 반복 코드 비교")
     @Test
-    public void useExternalForeach(){
+    public void useExternalForeach() {
 
         //given
         List<Dish> vegetarianDishesUseForeach = new ArrayList<>(); // 외부 반복
-        List<Dish> vegetarianDishesUseStream ; // 내부 반복
+        List<Dish> vegetarianDishesUseStream; // 내부 반복
 
         //when
         // 채식이면 vegetarianDishesUseForeach 리스트에 추가 (외부 반복 코드)
         for (Dish dish : menu) {
-            if(dish.isVegetarian()){
+            if (dish.isVegetarian()) {
                 vegetarianDishesUseForeach.add(dish);
             }
         }
@@ -49,7 +49,7 @@ public class TestCode {
 
         //then
         //외부 반복과 내부반복 각 인덱스의 요리 이름 비교
-        for (int i =0; i<vegetarianDishesUseForeach.size(); i++){
+        for (int i = 0; i < vegetarianDishesUseForeach.size(); i++) {
             Assertions.assertThat(vegetarianDishesUseForeach.get(i)).isEqualTo(vegetarianDishesUseStream.get(i));
         }
     }
@@ -63,7 +63,7 @@ public class TestCode {
      */
     @DisplayName("프레디 케이트로 필터링")
     @Test
-    public void usePredicateFilteringMethod(){
+    public void usePredicateFilteringMethod() {
         //when
         //채식인 것들만 필터링 해서 리스트로 collect
         List<Dish> vegitarianMenu = menu.stream().filter(Dish::isVegetarian)
@@ -83,9 +83,9 @@ public class TestCode {
      */
     @DisplayName("고유 요소 필터링")
     @Test
-    public void useUniqueElementFilteringMethod(){
+    public void useUniqueElementFilteringMethod() {
         //given
-        List<Integer> numbers = Arrays.asList(1,2,1,3,3,2,4);
+        List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
 
         //when
         //짝수일 경우에만 필터링 후 중복제거하여 리스트로 만듬.
@@ -108,11 +108,8 @@ public class TestCode {
      */
     @DisplayName("takeWhile을 사용 한 슬라이싱")
     @Test
-    public void useTakeWhileSlicingMeThod(){
-<<<<<<< HEAD
+    public void useTakeWhileSlicingMeThod() {
 
-=======
->>>>>>> 8cd9401ae6c5a102dccd069a61670cdf8c755c8f
         //when
         //filter를 이용한 필터링 코드
         List<Dish> filteredMenu = specialMenu.stream()
@@ -121,7 +118,7 @@ public class TestCode {
 
         //takeWhile을 이용한 슬라이싱 코드
         List<Dish> slicedMenu = specialMenu.stream()
-                .takeWhile(dish -> dish.getCalories()<320)
+                .takeWhile(dish -> dish.getCalories() < 320)
                 .collect(Collectors.toList());
 
         //then
@@ -138,7 +135,7 @@ public class TestCode {
      */
     @DisplayName("dropWhile을 사용 한 슬라이싱")
     @Test
-    public void useDropWhileSlicingMeThod(){
+    public void useDropWhileSlicingMeThod() {
 
         //when
         //filter를 이용한 필터링 코드
@@ -148,7 +145,7 @@ public class TestCode {
 
         //dropWhile을 이용한 슬라이싱 코드
         List<Dish> slicedMenu = specialMenu.stream()
-                .dropWhile(dish -> dish.getCalories()<320)
+                .dropWhile(dish -> dish.getCalories() < 320)
                 .collect(Collectors.toList());
 
         //then
@@ -166,25 +163,24 @@ public class TestCode {
      */
     @DisplayName("스트림 축소")
     @Test
-    public void useLimit(){
+    public void useLimit() {
 
         int N = 10; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
 
         //when
         //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
         List<Dish> dishes = specialMenu.stream()
-                .filter(dish-> dish.getCalories() >= 300)
+                .filter(dish -> dish.getCalories() >= 300)
                 .limit(N)
                 .collect(Collectors.toList());
 
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
-<<<<<<< HEAD
         dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() >= 300));
         dishes.stream().forEach(dish -> System.out.println(dish.getName()));
 
         //리스트의 사이즈가 N인지 확인.
-        Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
+//        Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
     }
 
     /**
@@ -196,26 +192,59 @@ public class TestCode {
      */
     @DisplayName("요소 건너뛰기")
     @Test
-    public void useSkip(){
+    public void useSkip() {
         long n = 2;
 
         //when
         List<Dish> dishes = menu.stream().filter(dish -> dish.getCalories() > 300)
-                .skip(n)
+                .skip(n)                        //n개 만큼 건너뜀.
                 .collect(Collectors.toList());
 
         //then
-        Assertions.assertThat(dishes.stream()
+        Assertions.assertThat(menu.stream()
                 .filter(dish -> dish.getCalories() > 300)
-                .count()).isEqualTo(dishes.size()-n);
+                .count()).isEqualTo(dishes.size() + n);
 
-    }
-=======
         dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
         dishes.stream().forEach(dish -> System.out.println(dish.getName()));
     }
 
+    /**
+     * 5-1 퀴즈 : 필터링
+     * 요구사항 (문제) : 스트림을 이용해서 처음 등장하는 두개의 고기 요리를 필터링 하시오.
+     * 해결방법 : stream - filter - limit
+     * 예상 되는 결과 값 : dish 타입이 meat인 맨 앞 2가지 요리로 이루어진 리스트
+     * 검증 방법
+     * 1. size가 2인지 확인.
+     * 2. 모든 요소가 meat 타입인지 확인.
+     * 3. 맨 처음 등장하는 2개의 요리 고기 인지 확인.
+     */
 
->>>>>>> 8cd9401ae6c5a102dccd069a61670cdf8c755c8f
+    @DisplayName("필터링")
+    @Test
+    public void filteringFirstTwoMeatDish(){
+
+        //when
+        //limit 사용
+        List<Dish> useLimitTwoMeatDishList = menu.stream()
+                .filter(dish -> dish.getType() == Dish.Type.MEAT)
+                .limit(2)
+                .collect(Collectors.toList());
+
+
+        //then
+        Assertions.assertThat(useLimitTwoMeatDishList.size()).isEqualTo(2);
+        useLimitTwoMeatDishList.stream().forEach(dish -> Assertions.assertThat(dish.getType() == Dish.Type.MEAT));
+
+
+    }
+
+
+
+
+
 
 }
+
+
+
