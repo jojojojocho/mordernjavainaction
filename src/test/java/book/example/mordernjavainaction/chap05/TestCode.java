@@ -109,7 +109,10 @@ public class TestCode {
     @DisplayName("takeWhile을 사용 한 슬라이싱")
     @Test
     public void useTakeWhileSlicingMeThod(){
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8cd9401ae6c5a102dccd069a61670cdf8c755c8f
         //when
         //filter를 이용한 필터링 코드
         List<Dish> filteredMenu = specialMenu.stream()
@@ -160,13 +163,12 @@ public class TestCode {
      * 해결 방법 : stream - filter - limit - collect
      * 에상되는 결과 값 : 300칼로리 이상의 요리로 이루어진 size가 N 개인 리스트
      * 검증 : 1. 리스트 각 요소별로 300칼로리 이상인지 확인,
-     *       2. 사이즈가 N개 인지 확인
      */
     @DisplayName("스트림 축소")
     @Test
     public void useLimit(){
 
-        int N = 3; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
+        int N = 10; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
 
         //when
         //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
@@ -177,6 +179,7 @@ public class TestCode {
 
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
+<<<<<<< HEAD
         dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() >= 300));
         dishes.stream().forEach(dish -> System.out.println(dish.getName()));
 
@@ -207,5 +210,12 @@ public class TestCode {
                 .count()).isEqualTo(dishes.size()-n);
 
     }
+=======
+        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
+        dishes.stream().forEach(dish -> System.out.println(dish.getName()));
+    }
+
+
+>>>>>>> 8cd9401ae6c5a102dccd069a61670cdf8c755c8f
 
 }
