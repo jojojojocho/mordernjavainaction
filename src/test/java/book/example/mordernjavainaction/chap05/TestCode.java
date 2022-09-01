@@ -106,7 +106,7 @@ public class TestCode {
      * 예상되는 결과값 : 320칼로리 이하의 dish로 이루어진 리스트.
      * 검증 : 결과 리스트의 각 요소 별로 칼로리가 320이하 인지 개별 확인.
      */
-    @DisplayName("takeWhile을 사용 한 슬라이싱")
+    @DisplayName("takeWhile을 사용 한 슬라이싱") //takeWhile은 정렬된 상태에서만 사용이 가능하다.
     @Test
     public void useTakeWhileSlicingMeThod() {
 
@@ -123,17 +123,17 @@ public class TestCode {
 
         //then
         // 각 요소가 320이하 칼로리인지 검증.
-        slicedMenu.stream().forEach(d -> Assertions.assertThat(d.getCalories() < 320));
+        slicedMenu.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() < 320));
     }
 
     /**
      * 5.2.1 : 프레디 케이트를 이용한 슬라이싱
      * 요구사항(문제) : dish 객체로 이루어진 정렬된 리스트 안의 요소 중 320칼로리 이상의 요리만 필터링 해라.
      * 해결 방법 : stream - dropWhile - collect
-     * 예상되는 결과값 : 320칼로리 이하의 dish로 이루어진 리스트.
+     * 예상되는 결과값 : 320칼로리 이상의 dish로 이루어진 리스트.
      * 검증 : 결과 리스트의 각 요소 별로 칼로리가 320이상 인지 개별 확인.
      */
-    @DisplayName("dropWhile을 사용 한 슬라이싱")
+    @DisplayName("dropWhile을 사용 한 슬라이싱") // dropWhile은 정렬된 상태의 스트림에서만 사용이 가능하다.
     @Test
     public void useDropWhileSlicingMeThod() {
 
@@ -165,13 +165,13 @@ public class TestCode {
     @Test
     public void useLimit() {
 
-        int N = 10; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
+        int n = 10; // 조건식에 부합 하는 것을 몇 개 반환할 것인가?
 
         //when
         //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
         List<Dish> dishes = specialMenu.stream()
                 .filter(dish -> dish.getCalories() >= 300)
-                .limit(N)
+                .limit(n)
                 .collect(Collectors.toList());
 
         //then
@@ -188,7 +188,7 @@ public class TestCode {
      * 요구사항 (문제) : 300칼로리 이상의 처음 두 요리를 건너 뛴 다음에 300칼로리가 넘는 나머지 요리를 반환.
      * 해결 방법 : stream - filter - skip - collect
      * 예상되는 결과 값과 타입 : 300칼로리 이상의 요리 중 앞의 2개를 뺀 나머지 300칼로리 이상의 요리 리스트
-     * 검증 : filter만 걸었을 때의 길이와 skip을 했을 때의 길이 차이로 검증 시도.
+     * 검증 : filter만 걸었을 때의 길이와 skip을 했을 때의 길이 + n 으로 검증 시도.
      */
     @DisplayName("요소 건너뛰기")
     @Test
@@ -217,7 +217,6 @@ public class TestCode {
      * 검증 방법
      * 1. size가 2인지 확인.
      * 2. 모든 요소가 meat 타입인지 확인.
-     * 3. 맨 처음 등장하는 2개의 요리 고기 인지 확인.
      */
 
     @DisplayName("필터링")
@@ -231,13 +230,27 @@ public class TestCode {
                 .limit(2)
                 .collect(Collectors.toList());
 
-
         //then
-        Assertions.assertThat(useLimitTwoMeatDishList.size()).isEqualTo(2);
-        useLimitTwoMeatDishList.stream().forEach(dish -> Assertions.assertThat(dish.getType() == Dish.Type.MEAT));
+        Assertions.assertThat(useLimitTwoMeatDishList.size()).isEqualTo(2);  //size 검증
+        useLimitTwoMeatDishList.stream().forEach(dish -> Assertions.assertThat(dish.getType() == Dish.Type.MEAT)); //타입 검증
 
 
     }
+
+    /**
+     * 5.3 매핑
+     * 특정 객체에서 특정 데이터를 선택하는 작업.
+     */
+
+    /**
+     * 5.3.1 스트림의 각 요소에 함수 적용하기
+     * 요구사항 (문제) :
+     * 해결방법 :
+     * 예상 되는 결과 값:
+     * 검증방법 :
+     */
+//    @DisplayName("스트림으로 각 요소에 함수 적용")
+
 
 
 
