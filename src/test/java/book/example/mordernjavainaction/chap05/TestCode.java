@@ -221,7 +221,7 @@ public class TestCode {
 
     @DisplayName("필터링")
     @Test
-    public void filteringFirstTwoMeatDish(){
+    public void filteringFirstTwoMeatDish() {
 
         //when
         //limit 사용
@@ -244,19 +244,85 @@ public class TestCode {
 
     /**
      * 5.3.1 스트림의 각 요소에 함수 적용하기
-     * 요구사항 (문제) :
-     * 해결방법 :
-     * 예상 되는 결과 값:
-     * 검증방법 :
+     * 요구사항 (문제) : dish 객체를 가지고 있는 리스트에서 각 dish 객체를 dish.getName으로 매핑하고 싶다.
+     * 로직 : stream - map - collect 사용
+     * 예상 되는 결과 값: 요리 이름으로 구성된 리스트.
+     * 검증방법 : dish 객체 리스트와 요리이름 리스트를 순회하면서 이름을 비교.
      */
-//    @DisplayName("스트림으로 각 요소에 함수 적용")
+    @DisplayName("스트림으로 각 요소에 함수 적용 1")
+    @Test
+    public void useMapMethodForDishToDishName() {
+
+        //when
+        List<String> dishNames = menu.stream()
+                .map(dish -> dish.getName())
+                .collect(Collectors.toList());
+
+        //then
+        for (int i = 0; i < menu.size(); i++) {
+            Assertions.assertThat(menu.get(i).getName()).isEqualTo(dishNames.get(i));
+        }
+
+    }
+
+    /**
+     * 5.3.1 스트림의 각 요소에 함수 적용하기
+     * 요구사항 (문제) : 단어가 포함된 리스트가 주어졌을 때 각 요소(단어)별 길이를 알고 싶다.
+     * 로직 : stream - map - collect 사용
+     * 예상 되는 결과 값: 단어의 길이로 이루어진 리스트.
+     * 검증방법 : 2개의 리스트를 순회해가면서 길이값을 비교.
+     */
+
+    @DisplayName("스트림으로 각 요소에 함수 적용 2")
+    @Test
+    public void useMapMethodForWordToWordLength() {
+        //given
+        List<String> words = Arrays.asList("Modern", "Java", "In", "Action");
+
+        //when
+        List<Integer> wordLengths = words.stream()
+                .map(word -> word.length())
+                .collect(Collectors.toList());
+
+        //then
+        for (int i = 0; i < words.size(); i++) {
+            Assertions.assertThat(words.get(i).length()).isEqualTo(wordLengths.get(i));
+        }
+    }
+
+    /**
+     * 5.3.1 스트림의 각 요소에 함수 적용하기
+     * 요구사항 (문제) : dish 객체로 구성된 리스트가 주어 졌을 때 dishName의 길이를 알고싶다.
+     * 로직 : stream - map - map - collect 사용
+     * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
+     * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
+     */
 
 
+    @DisplayName("스트림으로 각 요소에 함수 적용 3")
+    @Test
+    public void useMapMethodForDishToDishNameLength() {
 
+        //when
+        List<Integer> dishNameLength = menu.stream()
+                .map(dish -> dish.getName())
+                .map(name -> name.length())
+                .collect(Collectors.toList());
 
+        //then
+        for(int i =0; i<menu.size(); i++){
+            Assertions.assertThat(dishNameLength.get(i)).isEqualTo(menu.get(i).getName().length());
+        }
 
+    }
 
-
+    /**
+     * 5.3.2 스트림 평면화
+     * 요구사항 (문제) : .
+     * 로직 : stream - map - map - collect 사용
+     * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
+     * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
+     */
 }
 
 
