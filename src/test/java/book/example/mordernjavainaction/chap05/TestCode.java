@@ -428,7 +428,7 @@ public class TestCode {
      * 예상되는 결과 값 : 숫자쌍으로 이루어진 리스트를 요소로 가지고 있는 리스트 => List<int[]>
      * 검증 : 브루트포스를 이용하여 숫자쌍을 조합하고 결과리스트의 각 요소와 비교
      */
-    @DisplayName("5.2 퀴즈 2번문제")
+    @DisplayName("5.2 퀴즈 2,3번문제")
     @Test
     public void mappingTwoNumberToOnePairListOfNumber() {
         //given
@@ -456,10 +456,20 @@ public class TestCode {
         /**
          * 5.2 퀴즈 3번 문제: 매핑
          * 요구사항 : 5.2 퀴즈 2번 문제의 결과 값 중 pair의 합을 3으로 나누었을 때, 나머지가 0인 pair만 반환하시오.
-         * 로직 :
-         * 예상되는 결과 값 :
-         * 검증 :
+         * 로직 : stream - flatmap( stream - map - filter).collect
+         * 예상되는 결과 값 : 합이 3으로 나누어 떨어지는  pair를 요소로 가지고있는 List<int[]>
+         * 검증 : 결과 리스트의 최종 값이 3으로 나누어 떨어지는지 확인.
          */
+
+        //when
+        List<int[]> filteredResult = firstNumList.stream()
+                .flatMap(i -> secondNumList.stream()
+                        .map(j -> new int[]{i, j})
+                        .filter(pair -> Arrays.stream(pair).sum() % 3 == 0))
+                .collect(Collectors.toList());
+
+        //then
+        filteredResult.stream().forEach(pair -> Assertions.assertThat(Arrays.stream(pair).sum() % 3 ).isEqualTo(0));
     }
 
 
