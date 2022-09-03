@@ -6,10 +6,9 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class TestCode {
@@ -319,13 +318,11 @@ public class TestCode {
 
     /**
      * 5.3.2 스트림 평면화
-<<<<<<< HEAD
      * 요구사항 (문제) : .
      * 로직 : stream - map - map - collect 사용
      * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
      * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
-     */
-=======
+     *
      * 요구사항 (문제) : String타입의 단어로 이루어진 리스트를 받아 고유문자로 매핑해 반환.
      * 로직 : stream - map(split("")) - map(Arrays.stream) - distinct() - collect(toList)
      * 예상 되는 결과 값:
@@ -347,7 +344,10 @@ public class TestCode {
          * 로직 : stream - map(split) - distinct - collect
          * 실패 사유 - 반환타입이 List<String[]>이고, 중복도 제거하지 못하였으므로 요구사항을 충족하지 못함.
          */
-        List<String[]> resultOfUseMap = words.stream().map(word -> word.split("")).distinct().collect(Collectors.toList());
+        List<String[]> resultOfUseMap = words.stream()
+                .map(word -> word.split(""))
+                .distinct()
+                .collect(Collectors.toList());
         //검증
         resultOfUseMap.stream()
                 .forEach(strArr->Assertions.assertThat(strArr).isInstanceOf(String[].class));
@@ -405,6 +405,7 @@ public class TestCode {
             Assertions.assertThat(validationMap.getOrDefault(character, null)).isEqualTo(null);
             validationMap.put(character, character);
         });
+        System.out.println(result);
     }
 
 
@@ -541,7 +542,7 @@ public class TestCode {
     }
 
 
->>>>>>> feature
+
 }
 
 
