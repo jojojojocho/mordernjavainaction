@@ -2,6 +2,7 @@ package book.example.mordernjavainaction.chap05;
 
 import book.example.mordernjavainaction.chap04.Dish;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -333,32 +334,40 @@ public class TestCode {
         //given
         List<String> words = Arrays.asList("Modern", "Java", "In", "Action");
 
+        //when
         /**
          * 로직 : stream - map(split) - distinct - collect
          * 실패 사유 - 반환타입이 List<String[]>이고, 중복도 제거하지 못하였으므로 요구사항을 충족하지 못함.
          */
-        List<String[]> collect = words.stream().map(word -> word.split("")).distinct().collect(Collectors.toList());
-        System.out.println(collect);
-
+        List<String[]> resultOfUseMap = words.stream().map(word -> word.split("")).distinct().collect(Collectors.toList());
+        //검증
+        resultOfUseMap.stream()
+                .forEach(strArr->Assertions.assertThat(strArr).isInstanceOf(String[].class));
 
         /**
          * map과 Arrays.stream 활용
          * 로직 : stream - map(split) - map(Arrays.stream) -distinct - collect
          * 실패 사유 - 반환 타입이 List<Stream<String>>이고, 중복도 제거하지 못하였으므로 요구사항에 부합하지 않음.
          */
+        //given
         String[] arrayOfWords = {"Goodbye", "World"};
+        //when
         Stream<String> streamOfWords = Arrays.stream(arrayOfWords);
-        System.out.println(streamOfWords);
+        //then
+        streamOfWords.forEach(string -> Assertions.assertThat(string).isInstanceOf(String.class));
+
+
 
         //when
-        List<Stream<String>> result = words.stream()
+        List<Stream<String>> resultOfUseArraysStream = words.stream()
                 .map(word -> word.split(""))
-                .map(split -> Arrays.stream(split))
+                .map(splitArr -> Arrays.stream(splitArr))
                 .distinct()
                 .collect(Collectors.toList());
 
         //then
-        System.out.println(result);
+        resultOfUseArraysStream.stream()
+                .forEach(stream -> Assertions.assertThat(stream).isInstanceOf(Stream.class));
     }
 
     /**
@@ -377,11 +386,12 @@ public class TestCode {
         //when
         List<String> result = words.stream()
                 .map(word -> word.split(""))
-                .flatMap(word -> Arrays.stream(word))
+                .flatMap(splitArr -> Arrays.stream(splitArr))
                 .distinct()
                 .collect(Collectors.toList());
 
         //then
+        //맵에 character가 없으면 pass , 있으면 테스트 실패
         Map<String, String> validationMap = new HashMap<>();
         result.stream().forEach(character -> {
             Assertions.assertThat(validationMap.getOrDefault(character, null)).isEqualTo(null);
@@ -408,6 +418,7 @@ public class TestCode {
         List<Integer> nList = Arrays.stream(nArr).boxed().collect(Collectors.toList());
 
         //when
+        //제곱으로 매핑
         List<Integer> squaredNumberList = nList.stream()
                 .map(number -> number * number)
                 .collect(Collectors.toList());
@@ -440,8 +451,10 @@ public class TestCode {
         List<Integer> secondNumList = Arrays.stream(secondArr).boxed().collect(Collectors.toList());
 
         //when
+        //pair 만들기
         List<int[]> result = firstNumList.stream()
-                .flatMap(i -> secondNumList.stream().map(j -> new int[]{i, j}))
+                .flatMap(i -> secondNumList.stream()
+                        .map(j -> new int[]{i, j}))
                 .collect(Collectors.toList());
 
         //then
@@ -449,14 +462,14 @@ public class TestCode {
         while (index < result.size()) {
             for (int i : firstArr) {
                 for (int j : secondArr) {
-                    Assertions.assertThat(result.get(index++)).isEqualTo(new int[] {i,j});
+                    Assertions.assertThat(result.get(index++)).isEqualTo(new int[]{i, j});
                 }
             }
         }
         /**
          * 5.2 퀴즈 3번 문제: 매핑
          * 요구사항 : 5.2 퀴즈 2번 문제의 결과 값 중 pair의 합을 3으로 나누었을 때, 나머지가 0인 pair만 반환하시오.
-         * 로직 : stream - flatmap( stream - map - filter).collect
+         * 로직 : stream - flatmap( stream - filter - map ).collect
          * 예상되는 결과 값 : 합이 3으로 나누어 떨어지는  pair를 요소로 가지고있는 List<int[]>
          * 검증 : 결과 리스트의 최종 값이 3으로 나누어 떨어지는지 확인.
          */
@@ -464,18 +477,60 @@ public class TestCode {
         //when
         List<int[]> filteredResult = firstNumList.stream()
                 .flatMap(i -> secondNumList.stream()
-                        .map(j -> new int[]{i, j})
-                        .filter(pair -> Arrays.stream(pair).sum() % 3 == 0))
+                        .filter(j -> (i + j) % 3 == 0)
+                        .map(j -> new int[]{i, j}))
                 .collect(Collectors.toList());
 
         //then
-        filteredResult.stream().forEach(pair -> Assertions.assertThat(Arrays.stream(pair).sum() % 3 ).isEqualTo(0));
+        filteredResult.stream()
+                .forEach(pair -> Assertions.assertThat(Arrays.stream(pair).sum() % 3).isEqualTo(0));
     }
 
 
+    /**
+     * 5.4 검색과 매칭 - allMatch, anyMatch, noneMatch, findFirst, findAny
+     */
 
+    /**
+     * 5.4.1 프레디케이트가 적어도 한 요소와 일치하는지 확인 - anyMatch
+     * 요구사항 : 이 요리가 채식 요리이면 print문 출력
+     * 로직 : if 문과 stream().anyMatch를 이용한 분기
+     * 예상되는 결과 값 : 현재 메뉴에는 채식 요리가 들어가 있으므로 채식 요리라는 print문이 출력.
+     * 검증 : expected : 채식 요리를 포함 일 경우 pass
+     */
+    @DisplayName("프레디케이트가 적어도 한 요소와 일치하는지 확인")
+    @Test
+    public void useAnyMatch(){
 
+        //when
+        if(menu.stream().anyMatch(dish -> dish.isVegetarian())){
+            System.out.println("이 메뉴는 채식 요리 입니다.");
+        }
 
+        //then
+        Assertions.assertThat(menu.stream().anyMatch(dish-> dish.isVegetarian())).isEqualTo(true);
+    }
+
+    /**
+     * 5.4.2. 프레디케이트가 모든 요소와 일치하는지 검사 - allMatch
+     * 요구사항 : 메뉴의 모든 요소가 1000칼로리 이하인지 확인.
+     * 로직 : if문과 stream() - allMatch 사용.
+     * 예상되는 결과 값 : 모든 메뉴가 1000칼로리 이하이면 건강식이라는 프린트문이 출력
+     * 검증 : expected : 1000칼로리 이하라면 true / 아니라면 false
+     */
+    @DisplayName("프레디케이트가 모든 요소와 일치하는지 검사")
+    @Test
+    public void useAllMatch(){
+
+        //when
+        if(menu.stream().allMatch(dish -> dish.getCalories() < 1000)){
+            System.out.println("이 메뉴는 건강식 입니다.");
+        }
+
+        //then
+        Assertions.assertThat(menu.stream().allMatch(dish-> dish.getCalories() < 1000)).isEqualTo(true);
+
+    }
 
 
 }
