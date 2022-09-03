@@ -2,6 +2,7 @@ package book.example.mordernjavainaction.chap05;
 
 import book.example.mordernjavainaction.chap04.Dish;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -318,11 +319,229 @@ public class TestCode {
 
     /**
      * 5.3.2 스트림 평면화
+<<<<<<< HEAD
      * 요구사항 (문제) : .
      * 로직 : stream - map - map - collect 사용
      * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
      * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
      */
+=======
+     * 요구사항 (문제) : String타입의 단어로 이루어진 리스트를 받아 고유문자로 매핑해 반환.
+     * 로직 : stream - map(split("")) - map(Arrays.stream) - distinct() - collect(toList)
+     * 예상 되는 결과 값:
+     * 1. stream => String
+     * 2. map(split("")) => String[]
+     * 3. map(Arrays.stream) => Stream<String>
+     * 4. distinct() => Stream<String>
+     * 5. collect(toList) => List<Stream<String>>
+     * 검증 : 반환 타입 자체가 의도하던 타입이 아니라서 실패. 의도한 타입은 List<String>타입.
+     */
+    @DisplayName("map과 Array.stream 활용")
+    @Test
+    public void useMapAndArraysStream() {
+        //given
+        List<String> words = Arrays.asList("Modern", "Java", "In", "Action");
+
+        //when
+        /**
+         * 로직 : stream - map(split) - distinct - collect
+         * 실패 사유 - 반환타입이 List<String[]>이고, 중복도 제거하지 못하였으므로 요구사항을 충족하지 못함.
+         */
+        List<String[]> resultOfUseMap = words.stream().map(word -> word.split("")).distinct().collect(Collectors.toList());
+        //검증
+        resultOfUseMap.stream()
+                .forEach(strArr->Assertions.assertThat(strArr).isInstanceOf(String[].class));
+
+        /**
+         * map과 Arrays.stream 활용
+         * 로직 : stream - map(split) - map(Arrays.stream) -distinct - collect
+         * 실패 사유 - 반환 타입이 List<Stream<String>>이고, 중복도 제거하지 못하였으므로 요구사항에 부합하지 않음.
+         */
+        //given
+        String[] arrayOfWords = {"Goodbye", "World"};
+        //when
+        Stream<String> streamOfWords = Arrays.stream(arrayOfWords);
+        //then
+        streamOfWords.forEach(string -> Assertions.assertThat(string).isInstanceOf(String.class));
+
+
+
+        //when
+        List<Stream<String>> resultOfUseArraysStream = words.stream()
+                .map(word -> word.split(""))
+                .map(splitArr -> Arrays.stream(splitArr))
+                .distinct()
+                .collect(Collectors.toList());
+
+        //then
+        resultOfUseArraysStream.stream()
+                .forEach(stream -> Assertions.assertThat(stream).isInstanceOf(Stream.class));
+    }
+
+    /**
+     * 5.3.2 스트림 평면화
+     * 요구사항 (문제) : String타입의 단어로 이루어진 리스트를 받아 고유문자로 매핑해 반환.
+     * 로직 : stream - map(split("")) - flatmap(Arrays.stream()) - collect(toList)
+     * 예상 되는 결과 값: 중복문자가 없는 String타입을 요소로 가지고 있는  리스트
+     * 검증방법 : Map의 키를 이용해 중복여부 검증
+     */
+    @DisplayName("flatMap 사용")
+    @Test
+    public void useFlatMap() {
+        //given
+        List<String> words = Arrays.asList("Modern", "Java", "In", "Action");
+
+        //when
+        List<String> result = words.stream()
+                .map(word -> word.split(""))
+                .flatMap(splitArr -> Arrays.stream(splitArr))
+                .distinct()
+                .collect(Collectors.toList());
+
+        //then
+        //맵에 character가 없으면 pass , 있으면 테스트 실패
+        Map<String, String> validationMap = new HashMap<>();
+        result.stream().forEach(character -> {
+            Assertions.assertThat(validationMap.getOrDefault(character, null)).isEqualTo(null);
+            validationMap.put(character, character);
+        });
+    }
+
+
+    /**
+     * 5.2 퀴즈 1번 문제: 매핑
+     * 요구사항 :숫자를 요소로 가지고 있는 리스트가 주어졌을 때 각 요소를 각 숫자의 제곱으로 변환하여 리스트를 반환.
+     * ex) [1,2,3,4,5] => [1,4,9,16,25]
+     * 로직 : stream - map - collect
+     * 예상되는 결과 값: 각 요소의 제곱으로 이루어진 List<Integer>
+     * 검증 : 각 요소별 제곱근이 맞는지 순회 하면서 확인
+     */
+    @DisplayName("숫자리스트를 숫자제곱리스트로 변환해서 반환하기")
+    @Test
+    public void applySquared() {
+        //given
+        int[] nArr = {1, 2, 3, 4, 5};
+
+        //int[] -> List<Integer>
+        List<Integer> nList = Arrays.stream(nArr).boxed().collect(Collectors.toList());
+
+        //when
+        //제곱으로 매핑
+        List<Integer> squaredNumberList = nList.stream()
+                .map(number -> number * number)
+                .collect(Collectors.toList());
+
+        //then
+        for (int i = 0; i < nList.size(); i++) {
+            Integer element = nList.get(i);
+            Assertions.assertThat(squaredNumberList.get(i)).isEqualTo(element * element);
+        }
+    }
+
+    /**
+     * 5.2 퀴즈 2번 문제: 매핑
+     * 요구사항 : 숫자를 요소로 가지고 있는 숫자리스트가 2개 있을 때, 모든 숫자쌍의 경우의 수를 반환하시오.
+     * ex) [1,2,3], [3,4] => [(1,3), (1,4), (2,3), (2,4), (3,3), (3,4)]
+     * 로직 : 브루트 포스를 이용한 stream
+     * list1 - stream - flatmap ( list2 - stream - map() ).collect
+     * 예상되는 결과 값 : 숫자쌍으로 이루어진 리스트를 요소로 가지고 있는 리스트 => List<int[]>
+     * 검증 : 브루트포스를 이용하여 숫자쌍을 조합하고 결과리스트의 각 요소와 비교
+     */
+    @DisplayName("5.2 퀴즈 2,3번문제")
+    @Test
+    public void mappingTwoNumberToOnePairListOfNumber() {
+        //given
+        int[] firstArr = {1, 2, 3};
+        int[] secondArr = {3, 4};
+
+        //int[] -> List<Integer>
+        List<Integer> firstNumList = Arrays.stream(firstArr).boxed().collect(Collectors.toList());
+        List<Integer> secondNumList = Arrays.stream(secondArr).boxed().collect(Collectors.toList());
+
+        //when
+        //pair 만들기
+        List<int[]> result = firstNumList.stream()
+                .flatMap(i -> secondNumList.stream()
+                        .map(j -> new int[]{i, j}))
+                .collect(Collectors.toList());
+
+        //then
+        int index = 0;
+        while (index < result.size()) {
+            for (int i : firstArr) {
+                for (int j : secondArr) {
+                    Assertions.assertThat(result.get(index++)).isEqualTo(new int[]{i, j});
+                }
+            }
+        }
+        /**
+         * 5.2 퀴즈 3번 문제: 매핑
+         * 요구사항 : 5.2 퀴즈 2번 문제의 결과 값 중 pair의 합을 3으로 나누었을 때, 나머지가 0인 pair만 반환하시오.
+         * 로직 : stream - flatmap( stream - filter - map ).collect
+         * 예상되는 결과 값 : 합이 3으로 나누어 떨어지는  pair를 요소로 가지고있는 List<int[]>
+         * 검증 : 결과 리스트의 최종 값이 3으로 나누어 떨어지는지 확인.
+         */
+
+        //when
+        List<int[]> filteredResult = firstNumList.stream()
+                .flatMap(i -> secondNumList.stream()
+                        .filter(j -> (i + j) % 3 == 0)
+                        .map(j -> new int[]{i, j}))
+                .collect(Collectors.toList());
+
+        //then
+        filteredResult.stream()
+                .forEach(pair -> Assertions.assertThat(Arrays.stream(pair).sum() % 3).isEqualTo(0));
+    }
+
+
+    /**
+     * 5.4 검색과 매칭 - allMatch, anyMatch, noneMatch, findFirst, findAny
+     */
+
+    /**
+     * 5.4.1 프레디케이트가 적어도 한 요소와 일치하는지 확인 - anyMatch
+     * 요구사항 : 이 요리가 채식 요리이면 print문 출력
+     * 로직 : if 문과 stream().anyMatch를 이용한 분기
+     * 예상되는 결과 값 : 현재 메뉴에는 채식 요리가 들어가 있으므로 채식 요리라는 print문이 출력.
+     * 검증 : expected : 채식 요리를 포함 일 경우 pass
+     */
+    @DisplayName("프레디케이트가 적어도 한 요소와 일치하는지 확인")
+    @Test
+    public void useAnyMatch(){
+
+        //when
+        if(menu.stream().anyMatch(dish -> dish.isVegetarian())){
+            System.out.println("이 메뉴는 채식 요리 입니다.");
+        }
+
+        //then
+        Assertions.assertThat(menu.stream().anyMatch(dish-> dish.isVegetarian())).isEqualTo(true);
+    }
+
+    /**
+     * 5.4.2. 프레디케이트가 모든 요소와 일치하는지 검사 - allMatch
+     * 요구사항 : 메뉴의 모든 요소가 1000칼로리 이하인지 확인.
+     * 로직 : if문과 stream() - allMatch 사용.
+     * 예상되는 결과 값 : 모든 메뉴가 1000칼로리 이하이면 건강식이라는 프린트문이 출력
+     * 검증 : expected : 1000칼로리 이하라면 true / 아니라면 false
+     */
+    @DisplayName("프레디케이트가 모든 요소와 일치하는지 검사")
+    @Test
+    public void useAllMatch(){
+
+        //when
+        if(menu.stream().allMatch(dish -> dish.getCalories() < 1000)){
+            System.out.println("이 메뉴는 건강식 입니다.");
+        }
+
+        //then
+        Assertions.assertThat(menu.stream().allMatch(dish-> dish.getCalories() < 1000)).isEqualTo(true);
+
+    }
+
+
+>>>>>>> feature
 }
 
 
