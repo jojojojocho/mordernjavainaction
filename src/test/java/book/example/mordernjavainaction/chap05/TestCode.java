@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class TestCode {
 
@@ -50,7 +52,7 @@ public class TestCode {
         //then
         //외부 반복과 내부반복 각 인덱스의 요리 이름 비교
         for (int i = 0; i < vegetarianDishesUseForeach.size(); i++) {
-            Assertions.assertThat(vegetarianDishesUseForeach.get(i)).isEqualTo(vegetarianDishesUseStream.get(i));
+            assertThat(vegetarianDishesUseForeach.get(i)).isEqualTo(vegetarianDishesUseStream.get(i));
         }
     }
 
@@ -71,7 +73,7 @@ public class TestCode {
 
         //then
         //vegitarianMenu의 각 요소들이 채식인지 검증
-        vegitarianMenu.stream().forEach(dish -> Assertions.assertThat(dish.isVegetarian()).isEqualTo(true));
+        vegitarianMenu.stream().forEach(dish -> assertThat(dish.isVegetarian()).isEqualTo(true));
     }
 
 
@@ -96,7 +98,7 @@ public class TestCode {
 
         //then
         //중복제거 완료 후에는 2,4가 있을 것이므로 리스트 사이즈가 2 일 것이다.
-        Assertions.assertThat(uniqueEvenNumberList.size()).isEqualTo(2);
+        assertThat(uniqueEvenNumberList.size()).isEqualTo(2);
     }
 
     /**
@@ -123,7 +125,7 @@ public class TestCode {
 
         //then
         // 각 요소가 320이하 칼로리인지 검증.
-        slicedMenu.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() < 320));
+        slicedMenu.stream().forEach(dish -> assertThat(dish.getCalories() < 320));
     }
 
     /**
@@ -150,7 +152,7 @@ public class TestCode {
 
         //then
         // 각 요소가 320이상 칼로리인지 검증.
-        slicedMenu.stream().forEach(d -> Assertions.assertThat(d.getCalories() > 320));
+        slicedMenu.stream().forEach(d -> assertThat(d.getCalories() > 320));
     }
 
 
@@ -176,7 +178,7 @@ public class TestCode {
 
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
-        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() >= 300));
+        dishes.stream().forEach(dish -> assertThat(dish.getCalories() >= 300));
         dishes.stream().forEach(dish -> System.out.println(dish.getName()));
 
         //리스트의 사이즈가 N인지 확인.
@@ -201,11 +203,11 @@ public class TestCode {
                 .collect(Collectors.toList());
 
         //then
-        Assertions.assertThat(menu.stream()
+        assertThat(menu.stream()
                 .filter(dish -> dish.getCalories() > 300)
                 .count()).isEqualTo(dishes.size() + n);
 
-        dishes.stream().forEach(dish -> Assertions.assertThat(dish.getCalories() > 300));
+        dishes.stream().forEach(dish -> assertThat(dish.getCalories() > 300));
         dishes.stream().forEach(dish -> System.out.println(dish.getName()));
     }
 
@@ -231,8 +233,8 @@ public class TestCode {
                 .collect(Collectors.toList());
 
         //then
-        Assertions.assertThat(useLimitTwoMeatDishList.size()).isEqualTo(2);  //size 검증
-        useLimitTwoMeatDishList.stream().forEach(dish -> Assertions.assertThat(dish.getType() == Dish.Type.MEAT)); //타입 검증
+        assertThat(useLimitTwoMeatDishList.size()).isEqualTo(2);  //size 검증
+        useLimitTwoMeatDishList.stream().forEach(dish -> assertThat(dish.getType() == Dish.Type.MEAT)); //타입 검증
 
 
     }
@@ -260,7 +262,7 @@ public class TestCode {
 
         //then
         for (int i = 0; i < menu.size(); i++) {
-            Assertions.assertThat(menu.get(i).getName()).isEqualTo(dishNames.get(i));
+            assertThat(menu.get(i).getName()).isEqualTo(dishNames.get(i));
         }
 
     }
@@ -286,7 +288,7 @@ public class TestCode {
 
         //then
         for (int i = 0; i < words.size(); i++) {
-            Assertions.assertThat(words.get(i).length()).isEqualTo(wordLengths.get(i));
+            assertThat(words.get(i).length()).isEqualTo(wordLengths.get(i));
         }
     }
 
@@ -310,8 +312,8 @@ public class TestCode {
                 .collect(Collectors.toList());
 
         //then
-        for(int i =0; i<menu.size(); i++){
-            Assertions.assertThat(dishNameLength.get(i)).isEqualTo(menu.get(i).getName().length());
+        for (int i = 0; i < menu.size(); i++) {
+            assertThat(dishNameLength.get(i)).isEqualTo(menu.get(i).getName().length());
         }
 
     }
@@ -322,7 +324,7 @@ public class TestCode {
      * 로직 : stream - map - map - collect 사용
      * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
      * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
-     *
+     * <p>
      * 요구사항 (문제) : String타입의 단어로 이루어진 리스트를 받아 고유문자로 매핑해 반환.
      * 로직 : stream - map(split("")) - map(Arrays.stream) - distinct() - collect(toList)
      * 예상 되는 결과 값:
@@ -350,7 +352,7 @@ public class TestCode {
                 .collect(Collectors.toList());
         //검증
         resultOfUseMap.stream()
-                .forEach(strArr->Assertions.assertThat(strArr).isInstanceOf(String[].class));
+                .forEach(strArr -> assertThat(strArr).isInstanceOf(String[].class));
 
         /**
          * map과 Arrays.stream 활용
@@ -362,8 +364,7 @@ public class TestCode {
         //when
         Stream<String> streamOfWords = Arrays.stream(arrayOfWords);
         //then
-        streamOfWords.forEach(string -> Assertions.assertThat(string).isInstanceOf(String.class));
-
+        streamOfWords.forEach(string -> assertThat(string).isInstanceOf(String.class));
 
 
         //when
@@ -375,7 +376,7 @@ public class TestCode {
 
         //then
         resultOfUseArraysStream.stream()
-                .forEach(stream -> Assertions.assertThat(stream).isInstanceOf(Stream.class));
+                .forEach(stream -> assertThat(stream).isInstanceOf(Stream.class));
     }
 
     /**
@@ -402,7 +403,7 @@ public class TestCode {
         //맵에 character가 없으면 pass , 있으면 테스트 실패
         Map<String, String> validationMap = new HashMap<>();
         result.stream().forEach(character -> {
-            Assertions.assertThat(validationMap.getOrDefault(character, null)).isEqualTo(null);
+            assertThat(validationMap.getOrDefault(character, null)).isEqualTo(null);
             validationMap.put(character, character);
         });
         System.out.println(result);
@@ -435,7 +436,7 @@ public class TestCode {
         //then
         for (int i = 0; i < nList.size(); i++) {
             Integer element = nList.get(i);
-            Assertions.assertThat(squaredNumberList.get(i)).isEqualTo(element * element);
+            assertThat(squaredNumberList.get(i)).isEqualTo(element * element);
         }
     }
 
@@ -471,7 +472,7 @@ public class TestCode {
         while (index < result.size()) {
             for (int i : firstArr) {
                 for (int j : secondArr) {
-                    Assertions.assertThat(result.get(index++)).isEqualTo(new int[]{i, j});
+                    assertThat(result.get(index++)).isEqualTo(new int[]{i, j});
                 }
             }
         }
@@ -492,7 +493,7 @@ public class TestCode {
 
         //then
         filteredResult.stream()
-                .forEach(pair -> Assertions.assertThat(Arrays.stream(pair).sum() % 3).isEqualTo(0));
+                .forEach(pair -> assertThat(Arrays.stream(pair).sum() % 3).isEqualTo(0));
     }
 
 
@@ -501,7 +502,7 @@ public class TestCode {
      */
 
     /**
-     * 5.4.1 프레디케이트가 적어도 한 요소와 일치하는지 확인 - anyMatch
+     * 5.4.1 프레디케이트가 적어도 한 요소와 일치하는지 확인 - anyMatch(하나라도 매치 하는지 확인)
      * 요구사항 : 이 요리가 채식 요리이면 print문 출력
      * 로직 : if 문과 stream().anyMatch를 이용한 분기
      * 예상되는 결과 값 : 현재 메뉴에는 채식 요리가 들어가 있으므로 채식 요리라는 print문이 출력.
@@ -509,40 +510,74 @@ public class TestCode {
      */
     @DisplayName("프레디케이트가 적어도 한 요소와 일치하는지 확인")
     @Test
-    public void useAnyMatch(){
+    public void useAnyMatch() {
 
         //when
-        if(menu.stream().anyMatch(dish -> dish.isVegetarian())){
+        if (menu.stream().anyMatch(dish -> dish.isVegetarian())) {
             System.out.println("이 메뉴는 채식 요리 입니다.");
         }
 
         //then
-        Assertions.assertThat(menu.stream().anyMatch(dish-> dish.isVegetarian())).isEqualTo(true);
+        assertThat(menu.stream().anyMatch(dish -> dish.isVegetarian())).isEqualTo(true);
     }
 
     /**
-     * 5.4.2. 프레디케이트가 모든 요소와 일치하는지 검사 - allMatch
-     * 요구사항 : 메뉴의 모든 요소가 1000칼로리 이하인지 확인.
+     * 5.4.2. 프레디케이트가 모든 요소와 일치하는지 검사 - allMatch(모두 매치 하는지 확인)
+     * 요구사항 : 메뉴의 모든 요소가 1000칼로리 미만인지 확인.
      * 로직 : if문과 stream() - allMatch 사용.
-     * 예상되는 결과 값 : 모든 메뉴가 1000칼로리 이하이면 건강식이라는 프린트문이 출력
-     * 검증 : expected : 1000칼로리 이하라면 true / 아니라면 false
+     * 예상되는 결과 값 : 모든 메뉴가 1000칼로리 미만이면 건강식이라는 프린트문이 출력
+     * 검증 : expected : 1000칼로리 미만이라면 true / 아니라면 false
      */
     @DisplayName("프레디케이트가 모든 요소와 일치하는지 검사")
     @Test
-    public void useAllMatch(){
+    public void useAllMatch() {
 
         //when
-        if(menu.stream().allMatch(dish -> dish.getCalories() < 1000)){
+        if (menu.stream().allMatch(dish -> dish.getCalories() < 1000)) {
             System.out.println("이 메뉴는 건강식 입니다.");
         }
 
         //then
-        Assertions.assertThat(menu.stream().allMatch(dish-> dish.getCalories() < 1000)).isEqualTo(true);
+        assertThat(menu.stream().allMatch(dish -> dish.getCalories() < 1000)).isEqualTo(true);
 
     }
 
+    /**
+     * 5.4.2. 프레디케이트가 모든 요소와 일치하는지 검사 - noneMatch(모두 매치하지 않는지 확인)
+     * 요구사항 : dish.getCalories() >= 1000 조건이 모두 매치하지 않는지 검사
+     * 로직 : stream - noneMatch
+     * 예상 되는 결과 값 : 모든 메뉴가 1000칼로리 미만이면 건강식이라는 프린트문이 출력
+     * 검증 : expected : 1000칼로리 미만 true / 1000칼로리 이상 false
+     */
 
+    @DisplayName("주어진 프레디케이트가 일치하는 요소가 없는지 확인.")
+    @Test
+    public void useNoneMatch(){
 
+        //when
+        if(menu.stream().noneMatch(dish -> dish.getCalories() >= 1000)){
+            System.out.println("이 메뉴는 건강식입니다.");
+        }
+
+        //then
+        assertThat(menu.stream().noneMatch(dish -> dish.getCalories() >= 1000)).isEqualTo(true);
+    }
+
+    /**
+     * 5.4.3. 요소 검색 - findAny
+     * 요구사항 : 요리 중 채식인 요리가 있으면 반환
+     * 로직 : stream - filter(isvegetarian) - findAny - orElseThrow()
+     * 예상 되는 결과 값 : 단일 결과 값 dish 객체
+     * 검증 : 결과 값 dish 객체의 isVegetarian의 값이 true인지 확인.
+     */
+    @DisplayName("요소검색")
+    @Test
+    public void findAnyElement(){
+        //when
+        Dish dish = menu.stream().filter(d -> d.isVegetarian()).findAny().orElseThrow();
+        //then
+        assertThat(dish.isVegetarian()).isEqualTo(true);
+    }
 }
 
 
