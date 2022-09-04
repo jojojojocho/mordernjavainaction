@@ -567,16 +567,63 @@ public class TestCode {
      * 5.4.3. 요소 검색 - findAny
      * 요구사항 : 요리 중 채식인 요리가 있으면 반환
      * 로직 : stream - filter(isvegetarian) - findAny - orElseThrow()
-     * 예상 되는 결과 값 : 단일 결과 값 dish 객체
+     * 예상 되는 결과 값 : 단일 결과 값 dish 객체 or null
      * 검증 : 결과 값 dish 객체의 isVegetarian의 값이 true인지 확인.
      */
     @DisplayName("요소검색")
     @Test
-    public void findAnyElement(){
+    public void findAnyElement() throws NoSuchElementException {
         //when
-        Dish dish = menu.stream().filter(d -> d.isVegetarian()).findAny().orElseThrow();
+        Optional<Dish> dish = menu.stream().filter(d -> d.isVegetarian()).findAny();
         //then
-        assertThat(dish.isVegetarian()).isEqualTo(true);
+        if(dish.isPresent()) {
+            dish.ifPresent(d -> assertThat(d.isVegetarian()).isEqualTo(true));
+        }else{
+            throw new NoSuchElementException();
+        }
+
+        /**
+         * Optional Class의  메서드 사용해보기
+         */
+        //isPresent() : 존재하면 true 반환 없으면 false
+        boolean present = menu.stream().filter(d -> d.isVegetarian()).findAny().isPresent();
+
+        //ifPresent(Consumer<T>) : 존재하면 주어진 블록을 실행
+        menu.stream().filter(d -> d.isVegetarian()).findAny().ifPresent(d -> System.out.println(d.getName()));
+
+        //T get() : 존재하면 반환, 없으면 NoSuchElement 반환
+        Dish dish1 = menu.stream().filter(d -> d.isVegetarian()).findAny().get();
+
+        //T orElse(T other) : 값이 존재하면 값을 반환 값이 없으면 기본값 반환.
+        Dish dish2 = menu.stream().filter(d -> d.isVegetarian()).findAny().orElse(new Dish());
+    }
+
+    /**
+     * 5.4.4. 첫번째 요소 찾기
+     * 요구사항 : 리스트 안에 3으로 나누어 떨어지는 제일 첫 번째 값의 제곱값을 구해라.
+     * 로직 : stream - filter(x/3 == 0) - map(x*x) - findFirst
+     * 예상 되는 결과 값 : 리스트의 3의 배수 중 가장 첫번째 값의 제곱값
+     * 검증 : 결과값을 sqrt 후 3으로 나누었을 때 값이 0인지 체크
+     */
+    @DisplayName("첫 번째 요소 찾기")
+    @Test
+    public void findFirstElement(){
+        //given
+        List<Integer> listOfNumber = Arrays.asList(1,2,3,4,5);
+
+        //when
+        Optional<Integer> firstSquareDivisibleByThree = listOfNumber
+                .stream()
+                .filter(x -> x / 3 == 0)
+                .map(x -> x * x)
+                .findFirst();
+
+        //then
+        if(firstSquareDivisibleByThree.isPresent()){
+            firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3 ).isEqualTo(0));
+        }else{
+            throw new RuntimeException();
+        }
     }
 }
 
