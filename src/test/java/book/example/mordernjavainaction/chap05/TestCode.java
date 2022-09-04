@@ -622,9 +622,13 @@ public class TestCode {
         if(firstSquareDivisibleByThree.isPresent()){
             firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3 ).isEqualTo(0));
         }else{
-            throw new RuntimeException();
+            throw new NoSuchElementException();
         }
     }
+
+    /**
+     * 5.5 리듀싱
+     */
 }
 
 
