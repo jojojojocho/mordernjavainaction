@@ -13,6 +13,11 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+/**
+ * @author : 조병상
+ * @since : 2022-08-29
+ */
+
 public class TestCode {
 
     List<Dish> menu = new Dish().makeDishes();
@@ -628,7 +633,10 @@ public class TestCode {
 
     /**
      * 5.5 리듀싱
+     *
      */
+//    @DisplayName("")
+
 }
 
 
