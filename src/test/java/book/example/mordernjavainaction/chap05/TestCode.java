@@ -630,7 +630,7 @@ public class TestCode {
         }
     }
 
-    /**
+    /*
      * 5.5 리듀싱
      * - 모든 스트림 요소를 전부 처리해서 값으로 도출 하는 것을 리듀싱 연산이라고 한다.
      * - 함수형 프로그래밍 언어 용어로는 이 과정이 마치 종이를 작은조각이 될 때 까지 반복해서 접는 것과 비슷하다는 의미로 폴드라고 부른다.
@@ -675,15 +675,45 @@ public class TestCode {
         /*
          *  초깃값이 없는 reduce의 경우 Optional 타입으로 반환된다.
          */
-        OptionalInt reduce = Arrays.stream(numbers).reduce((a, b) -> a + b);
+        OptionalInt sumOfStreamNoInit = Arrays.stream(numbers).reduce((a, b) -> a + b);
+
 
 
 
         /*
          *  검증
          */
-        Assertions.assertThat(sumOfStream).isEqualTo(sum);
-        Assertions.assertThat(multiplyOfStream).isEqualTo(multiply);
+        Assertions.assertThat(sumOfStream).isEqualTo(sum);          // 초기값이 있는 요소의 합
+        Assertions.assertThat(multiplyOfStream).isEqualTo(multiply);    //초기값이 있는 요소의 곱
+        Assertions.assertThat(sumOfStreamNoInit.getAsInt()).isEqualTo(sum);      //초기값이 없는 요소의 합
+
+    }
+
+    /**
+     * 5.5.1 요소의 합
+     * problem : 리스트에서 최댓값과 최솟값을 구해라
+     * logic : find min and max value by using stream.
+     * expected result : min value and max value
+     * validation : array에서 구한 max, min과 List에서 구한 max, min을 비교
+     */
+    @DisplayName("요소의 합")
+    @Test
+    public void findMinMax(){
+        //given
+        int[] numbers = new int[] {4,5,3,9};
+        List<Integer> nList = Arrays.stream(numbers).boxed().collect(Collectors.toList());
+
+        //when
+        int maxFromArr = Arrays.stream(numbers).reduce(Math::max).orElseThrow();
+        int minFromArr = Arrays.stream(numbers).reduce(Math::min).orElseThrow();
+
+        Integer maxFromList = nList.stream().reduce(Math::max).orElseThrow();
+        Integer minFromList = nList.stream().reduce(Math::min).orElseThrow();
+
+        //then
+        Assertions.assertThat(maxFromArr).isEqualTo(maxFromList);
+        Assertions.assertThat(minFromArr).isEqualTo(minFromList);
+
 
     }
 
