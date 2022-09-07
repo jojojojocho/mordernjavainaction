@@ -641,6 +641,7 @@ public class TestCode {
      * problem : 스트림의 각 요소의 합을 구해라
      * logic : for문 => 스트림으로 변환
      * expected result : sum of stream elements
+     * validation : 외부반복을 이용한 요소의합, 요소의곱과 스트림을 이용한 요소의합, 요소의 곱을 비교.
      */
     @DisplayName("요소의 합")
     @Test
