@@ -691,7 +691,7 @@ public class TestCode {
     }
 
     /**
-     * 5.5.1 요소의 합
+     * 5.5.1 요소의 합 - 최댓값, 최솟값
      * problem : 리스트에서 최댓값과 최솟값을 구해라
      * logic : find min and max value by using stream.
      * expected result : min value and max value
@@ -718,7 +718,30 @@ public class TestCode {
 
     }
 
+    /**
+     * 퀴즈 5-3 리듀스
+     * problem : map과 reduce를 이용하여 스트림의 요리개수를 계산.
+     * logic : stream - map - reduce
+     * expected result : 요리 갯수
+     * validation : stream 안의 element의 갯수와 reduce결과를 비교
+     */
+    @DisplayName("스트림 안에있는 요리갯수를 계산")
+    @Test
+    public void countOfDishElement(){
+        //when
+        Integer count = menu.stream().map(dish -> 1)
+                .reduce(0, (a, b) -> a + b);
 
+        //then
+        long cnt = menu.stream().count();
+
+        Assertions.assertThat(count).isEqualTo(cnt);
+        System.out.println(count);
+        System.out.println(cnt);
+    }
+
+
+    
 }
 
 
