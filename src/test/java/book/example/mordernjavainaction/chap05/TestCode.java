@@ -556,10 +556,10 @@ public class TestCode {
 
     @DisplayName("주어진 프레디케이트가 일치하는 요소가 없는지 확인.")
     @Test
-    public void useNoneMatch(){
+    public void useNoneMatch() {
 
         //when
-        if(menu.stream().noneMatch(dish -> dish.getCalories() >= 1000)){
+        if (menu.stream().noneMatch(dish -> dish.getCalories() >= 1000)) {
             System.out.println("이 메뉴는 건강식입니다.");
         }
 
@@ -580,9 +580,9 @@ public class TestCode {
         //when
         Optional<Dish> dish = menu.stream().filter(d -> d.isVegetarian()).findAny();
         //then
-        if(dish.isPresent()) {
+        if (dish.isPresent()) {
             dish.ifPresent(d -> assertThat(d.isVegetarian()).isEqualTo(true));
-        }else{
+        } else {
             throw new NoSuchElementException();
         }
 
@@ -611,9 +611,9 @@ public class TestCode {
      */
     @DisplayName("첫 번째 요소 찾기")
     @Test
-    public void findFirstElement(){
+    public void findFirstElement() {
         //given
-        List<Integer> listOfNumber = Arrays.asList(1,2,3,4,5);
+        List<Integer> listOfNumber = Arrays.asList(1, 2, 3, 4, 5);
 
         //when
         Optional<Integer> firstSquareDivisibleByThree = listOfNumber
@@ -623,9 +623,9 @@ public class TestCode {
                 .findFirst();
 
         //then
-        if(firstSquareDivisibleByThree.isPresent()){
-            firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3 ).isEqualTo(0));
-        }else{
+        if (firstSquareDivisibleByThree.isPresent()) {
+            firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3).isEqualTo(0));
+        } else {
             throw new NoSuchElementException();
         }
     }
@@ -645,14 +645,14 @@ public class TestCode {
      */
     @DisplayName("요소의 합")
     @Test
-    public void sumOfElements(){
+    public void sumOfElements() {
         /*
          *  외부 반복을 통한 요소의 합
          */
-        int[] numbers = new int[] {4,5,3,9};
+        int[] numbers = new int[]{4, 5, 3, 9};
         int sum = 0;
         for (int x : numbers) {
-            sum+=x;
+            sum += x;
         }
         /*
          *  외부 반복을 통한 요소의 곱
@@ -671,7 +671,7 @@ public class TestCode {
         /*
          *  스트림을 사용한 요소의 곱
          */
-        int multiplyOfStream = Arrays.stream(numbers).reduce(1, (a, b) -> (a*b));
+        int multiplyOfStream = Arrays.stream(numbers).reduce(1, (a, b) -> (a * b));
 
         /*
          *  초깃값이 없는 reduce의 경우 Optional 타입으로 반환된다.
@@ -699,9 +699,9 @@ public class TestCode {
      */
     @DisplayName("요소의 합")
     @Test
-    public void findMinMax(){
+    public void findMinMax() {
         //given
-        int[] numbers = new int[] {4,5,3,9};
+        int[] numbers = new int[]{4, 5, 3, 9};
         List<Integer> nList = Arrays.stream(numbers).boxed().collect(Collectors.toList());
 
         //when
@@ -727,7 +727,7 @@ public class TestCode {
      */
     @DisplayName("스트림 안에있는 요리갯수를 계산")
     @Test
-    public void countOfDishElement(){
+    public void countOfDishElement() {
         //when
         Integer count = menu.stream().map(dish -> 1)
                 .reduce(0, (a, b) -> a + b);
@@ -738,10 +738,203 @@ public class TestCode {
         Assertions.assertThat(count).isEqualTo(cnt);
         System.out.println(count);
         System.out.println(cnt);
+
     }
 
+    /*
+     * 5.6 실전연습
+     */
+    Trader raoul = new Trader("Raoul", "Cambridge");
+    Trader mario = new Trader("Mario", "Milan");
+    Trader alan = new Trader("Alan", "Cambridge");
+    Trader brian = new Trader("Brian", "Cambridge");
 
+    List<Transaction> transactions = Arrays.asList(
+            new Transaction(brian, 2011, 300),
+            new Transaction(raoul, 2012, 1000),
+            new Transaction(raoul, 2011, 400),
+            new Transaction(mario, 2012, 710),
+            new Transaction(mario, 2012, 700),
+            new Transaction(alan, 2012, 950)
+    );
+
+
+    /**
+     * 실전문제 1
+     * problem : 2011년에 일어난 모든 트랜잭션을 찾아 값을 오름차 순으로 정리하시오.
+     * logic : stream - filter - sorted - collect
+     * expected result : List<Transactions>
+     * validation : 1. 2011년도의 Transaction인지 확인
+     * 2. 오름차순인지 확인.
+     */
+    @DisplayName("실전문제 1")
+    @Test
+    public void problemOne() {
+        //when
+        List<Transaction> result = transactions.stream().filter(transaction -> transaction.getYear() == 2011)
+                .sorted(Comparator.comparing(Transaction::getValue))
+                .collect(Collectors.toList());
+        //then
+        result.stream().forEach(transaction -> Assertions.assertThat(transaction.getYear()).isEqualTo(2011));
+
+        int compare = 0;
+        for (int i = 0; i < result.size(); i++) {
+            Assertions.assertThat(result.get(i).getValue()).isGreaterThan(compare);
+            compare = result.get(i).getValue();
+        }
+    }
+
+    /**
+     * 실전문제 2
+     * problem : 거래자가 근무하는 모든 도시를 중복없이 나열하시오.
+     * logic : stream - map - distinct - collect
+     * expected result : List<String>
+     * validation : 도시가 2개 이므로 카운트로 검증
+     */
+    @DisplayName("실전문제2")
+    @Test
+    public void problemTwo() {
+
+        //when
+        List<String> result = transactions.stream().map(transaction -> transaction.getTrader().getCity())
+                .distinct()
+                .collect(Collectors.toList());
+        //then
+        for (String city : result) {
+            System.out.println(city);
+        }
+        Assertions.assertThat(result.stream().count()).isEqualTo(2);
+    }
+
+    /**
+     * 실전문제 3
+     * problem : Cambridge에서 근무하는 모든 거래자를 찾아서 이름 순으로 정렬하시오.
+     * logic : stream - filter - map - distinct - sorted - collect
+     * expected result : List<String>
+     * validation : Cambridge에서 근무하는 사람은 총 3명이기 때문에 카운트로 검증.
+     */
+    @DisplayName("실전문제 3")
+    @Test
+    public void problemThree() {
+        //when
+        List<Trader> result = transactions.stream()
+                .filter(transaction -> transaction.getTrader().getCity() == "Cambridge")
+                .map(transaction -> transaction.getTrader())
+                .distinct()
+                .sorted(Comparator.comparing(Trader::getName))
+                .collect(Collectors.toList());
+        //then
+        result.stream().forEach(name -> System.out.println(name.getName()));
+        Assertions.assertThat(result.stream().count()).isEqualTo(3);
+    }
+
+    /**
+     * 실전문제 4
+     * problem : 모든 거래자의 이름을 알파벳순으로 정렬해서 반환하시오.
+     * logic : stream - map - distinct - sorted - reduce
+     * expected result : String
+     * validation : print로 검증
+     */
+    @DisplayName("실전문제 4")
+    @Test
+    public void problemFour() {
+        //when
+        String sortedAlpabet = transactions.stream()
+                .map(transaction -> transaction.getTrader().getName())
+                .distinct()
+                .sorted()
+                .reduce("", (s1, s2) -> s1 + s2);
+        //then
+        System.out.println(sortedAlpabet);
+//        Assertions.assertThat(result.stream().count()).isEqualTo(4);
+    }
+
+    /**
+     * 실전문제 5
+     * problem : 밀라노에 거래자가 있는가?
+     * logic : stream - anyMatch
+     * expected result : boolean => true
+     * validation : true인지 validation
+     */
+    @DisplayName("실전문제 5")
+    @Test
+    public void problemFive() {
+        //when
+        boolean traderInMilan = transactions.stream()
+                .anyMatch(transaction -> transaction.getTrader().getCity().equals("Milan"));
+
+        //then
+        Assertions.assertThat(traderInMilan).isEqualTo(true);
+    }
+
+    /**
+     * 실전문제 6
+     * problem : Cambridge에 거주하는 거래자의 모든 트랜잭션 값을 출력하시오.
+     * logic : stream - filter - foreach
+     * expected result : 트랜잭션 값 출력
+     * validation : 출력이므로 검증 x
+     */
+    @DisplayName("실전문제 6")
+    @Test
+    public void problemSix() {
+        //when
+        transactions.stream().filter(transaction -> transaction.getTrader().getCity().equals("Cambridge"))
+                .map(transaction -> transaction.getValue())
+                .forEach(value -> System.out.println(value));
+    }
+
+    /**
+     * 실전문제 7
+     * problem : 전체 트랜잭션 중 최댓값은 얼마인가?
+     * logic : stream - map - reduce  // stream - max - map
+     * expected result : 최댓값
+     * validation : 최대값인지 검증
+     */
+    @DisplayName("실전문제 7")
+    @Test
+    public void problemSeven() {
+        //when
+        Integer maxValue = transactions.stream()
+                .map(transaction -> transaction.getValue())
+//                .reduce((x,y) -> x>y ? x:y);
+                .reduce(Math::max).orElseThrow();
+        //then
+        Assertions.assertThat(maxValue).isEqualTo(transactions.stream()
+                .max(Comparator.comparing(Transaction::getValue))
+                .map(transaction -> transaction.getValue())
+                .orElseThrow());
+    }
     
+    /**
+     * 실전문제 8
+     * problem : 전체 트랜잭션 중 최솟값은 얼마인가?
+     * logic : stream - map - reduce //  stream - max - map
+     * expected result : 최솟값
+     * validation : 최솟값인지 검증
+     */
+    @DisplayName("실전문제 8")
+    @Test
+    public void problemEight(){
+        //when
+        Integer minValue = transactions.stream()
+                .map(transaction -> transaction.getValue())
+                .reduce(Math::min)
+                .orElseThrow();
+        //then
+        Assertions.assertThat(minValue).isEqualTo(transactions.stream().min(Comparator.comparing(Transaction::getValue))
+                .map(transaction -> transaction.getValue())
+                .orElseThrow());
+    
+    }
+
+    /**
+     * 5.7 숫자형 스트림
+     * problem :
+     * logic :
+     * expected result : 
+     * validation :
+     */
+
 }
 
 
