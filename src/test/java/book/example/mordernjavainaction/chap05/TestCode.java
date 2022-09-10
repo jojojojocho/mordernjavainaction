@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -904,7 +905,7 @@ public class TestCode {
                 .map(transaction -> transaction.getValue())
                 .orElseThrow());
     }
-    
+
     /**
      * 실전문제 8
      * problem : 전체 트랜잭션 중 최솟값은 얼마인가?
@@ -914,7 +915,7 @@ public class TestCode {
      */
     @DisplayName("실전문제 8")
     @Test
-    public void problemEight(){
+    public void problemEight() {
         //when
         Integer minValue = transactions.stream()
                 .map(transaction -> transaction.getValue())
@@ -924,16 +925,125 @@ public class TestCode {
         Assertions.assertThat(minValue).isEqualTo(transactions.stream().min(Comparator.comparing(Transaction::getValue))
                 .map(transaction -> transaction.getValue())
                 .orElseThrow());
-    
+
     }
 
     /**
      * 5.7 숫자형 스트림
-     * problem :
-     * logic :
-     * expected result : 
-     * validation :
+     * problem : 메뉴의 칼로리 합계 구하기
+     * logic : stream - map - reduce
+     * expected result : integer value
+     * validation : 합이 맞는지 확인
      */
+    @DisplayName("5.7 숫자형 스트림")
+    @Test
+    public void numberTypeStream() {
+        //when
+        Integer sumCalOfStream = menu.stream()
+                .map(Dish::getCalories)
+                .reduce(0, Integer::sum);
+
+        int sumCal = 0;
+        for (Dish dish : menu) {
+            sumCal += dish.getCalories();
+        }
+        //then
+        Assertions.assertThat(sumCalOfStream).isEqualTo(sumCal);
+    }
+
+    /**
+     * 5.7.1 기본형 특화 스트림 - 숫자 스트림으로 매핑
+     * problem : 메뉴의 칼로리 합계 구하기
+     * logic : stream - mapToInt - sum
+     * expected result : integer value
+     * validation : 합이 맞는지 확인
+     */
+    @DisplayName("숫자스트림으로 매핑")
+    @Test
+    public void useNumberTypeStream() {
+        //when
+        int sumOfCalStream = menu.stream()
+                .mapToInt(Dish::getCalories)
+                .sum();
+
+        int sumOfCal=0;
+        for (Dish dish : menu) {
+            sumOfCal+=dish.getCalories();
+        }
+
+        //then
+        Assertions.assertThat(sumOfCalStream).isEqualTo(sumOfCal);
+    }
+
+    /**
+     * 5.7.1 기본형 특화 스트림 - 객체 스트림으로 매핑
+     * problem : boxed 이용해보기
+     * logic : stream - mapToInt - boxed
+     * expected result : integer value
+     * validation : x
+     */
+    @DisplayName("객체 스트림으로 매핑")
+    @Test
+    public void useBoxed(){
+        //when
+        Stream<Integer> boxed = menu.stream().mapToInt(Dish::getCalories).boxed();
+        Integer sumOfCal = boxed.reduce(0, (d1, d2) -> d1 + d2);
+
+        System.out.println(sumOfCal);
+    }
+
+    /**
+     * 5.7.1 기본형 특화 스트림 - 기본값 OptionalInt
+     * problem : OptionalInt 사용해보기
+     * logic : stream - mapToInt - max
+     * expected result : OptionalInt value
+     * validation : 최댓값인지 검증
+     */
+    @DisplayName("기본값 OptionalInt 사용법 익히기")
+    @Test
+    public void useOptionalInt(){
+        //when
+        OptionalInt optionalInt = menu.stream().mapToInt(Dish::getCalories).max();
+        int maxVal = optionalInt.orElseThrow();
+
+        int maxValForEach =0;
+        for (Dish dish:menu){
+            maxValForEach = dish.getCalories() > maxValForEach ? dish.getCalories() : maxValForEach;
+        }
+        //then
+        Assertions.assertThat(maxVal).isEqualTo(maxValForEach);
+    }
+
+    /**
+     * 5.7.2 숫자 범위
+     * problem : 1 부터 100사이의 짝수를 구해라
+     * logic : IntStream - rangeClosed - filter - count
+     * expected result : long
+     * validation : 1-100까지의 짝수는 50개이므로 cnt가 50인지 비교
+     */
+    @DisplayName("1부터 100까지 사이에 짝수 구하기")
+    @Test
+    public void findEvenNumberBetween1And100(){
+        //when
+        //이상, 미만
+        long count = IntStream.range(0, 100).filter(number -> number % 2 == 0).count();
+        //이상, 이하
+        long cnt = IntStream.rangeClosed(2, 100).filter(number -> number % 2 == 0).count();
+
+        //then
+        System.out.println(count);
+        System.out.println(cnt);
+        Assertions.assertThat(count).isEqualTo(50);
+        Assertions.assertThat(cnt).isEqualTo(50);
+    }
+    /**
+     * 5.7.3 숫자 스트림 활용 - 피타고라스 수
+     * problem :
+     * logic : IntStream - rangeClosed - filter - count
+     * expected result : long
+     * validation : 1-100까지의 짝수는 50개이므로 cnt가 50인지 비교
+     */
+
 
 }
 
