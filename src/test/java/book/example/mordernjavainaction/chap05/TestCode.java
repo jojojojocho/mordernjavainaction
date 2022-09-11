@@ -1216,10 +1216,6 @@ public class TestCode {
                 .limit(10)
                 .forEach(System.out::println);
 
-        //when
-
-        //then
-
     }
 }
 
