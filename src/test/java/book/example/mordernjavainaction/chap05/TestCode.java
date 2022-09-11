@@ -5,6 +5,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -1036,15 +1040,187 @@ public class TestCode {
         Assertions.assertThat(count).isEqualTo(50);
         Assertions.assertThat(cnt).isEqualTo(50);
     }
+
     /**
      * 5.7.3 숫자 스트림 활용 - 피타고라스 수
-     * problem :
-     * logic : IntStream - rangeClosed - filter - count
-     * expected result : long
-     * validation : 1-100까지의 짝수는 50개이므로 cnt가 50인지 비교
+     * problem : 피타고라스 수 스트림을 만들자
+     * logic : 피타고라스의 정리 (a*a) + (b*b) = (c*c)  ===> a (1-100) , b (1-100) == c(Math.sqrt( (a*a) + (b*b) )
+     */
+    @DisplayName("pythagoreanTheorem")
+    @Test
+    public void pythagoreanTheorem(){
+        //when
+        List<int[]> intResult = IntStream.rangeClosed(1, 100).boxed()
+                .flatMap(a -> IntStream.rangeClosed(1, 100)
+                        .filter(b -> Math.sqrt((a * a) + (b * b)) % 1 == 0)
+                        .mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)})  // int -> obj
+                )
+                .limit(3)
+                .collect(Collectors.toList());
+
+
+        //개선된 방법
+        List<double[]> doubleResult = IntStream.rangeClosed(1, 100).boxed()
+                .flatMap(a -> IntStream.rangeClosed(1, 100)
+                        .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)})
+                        .filter(b -> b[2] % 1 == 0)
+                )
+                .collect(Collectors.toList());
+
+
+        for(int[] integer : intResult){
+            Arrays.stream(integer).forEach(o -> System.out.print(o+ " ,"));
+            System.out.println();
+        }
+
+        for(double[] doub : doubleResult){
+            Arrays.stream(doub).forEach(o -> System.out.print(o+ " ,"));
+            System.out.println();
+        }
+
+    }
+
+    /*
+     * 5.8 스트림 만들기
+     * - 스트림이 데이터 질의를 표현할 수있는 강력한 도구라는 것을 확인.
+     * - 실제로 컬렉션을 통해 stream을 얻을 수 있었고, 연산을 통해 결과를 도출했음.
+     * - 범위의 숫자를 만들어주는 IntStream의 range와 rangeClosed등의 메서드들도 살펴 보았음.
      */
 
+    /**
+     * 5.8.1 값으로 스트림 만들기
+     * problem : 임의의 수를 인수로 받는 정적 메서드 Stream.of를 이용하여 스트림을 만들자.
+     * logic : Stream.of()
+     */
+    @DisplayName("값으로 스트림 만들기")
+    @Test
+    public void valueToStream(){
+        //given
+        Stream<String> stream = Stream.of("Modern", "Java", "In", "Action");
 
+        //when
+//        stream.map(string -> string.toLowerCase()).forEach(s-> System.out.println(s));
+
+        //Stream.empty()를 이용해 스트림 비우기
+        Stream<String> emptyStream = Stream.empty();
+//        stream.map(string -> string.toLowerCase()).forEach(s-> System.out.println(s));
+
+    }
+
+    /**
+     * 5.8.2 null이 될 수 있는 객체로 스트림 만들기
+     * problem : 자바 9에서 추가된 null이 될 수 있는 개체를 스트림으로 만들 수 있는 메서드를 활용해보자
+     */
+    @DisplayName("null이 될 수 있는 객체로 스트림 만들기")
+    @Test
+    public void useStreamOfNullable(){
+        //적용 전
+        String home = System.getProperty("home");
+        Stream<String> notEmpty = home == null ? Stream.empty() : Stream.of("notEmpty");
+
+        //적용 후
+        Stream<String> values = Stream.ofNullable(System.getProperty("home"));
+
+        //flatMap과 함께 사용
+        Stream.of("config", "home", "user")
+                .flatMap(key -> Stream.ofNullable(System.getProperty(key)));
+
+    }
+    /**
+     * 5.8.3 배열로 스트림 만들기
+     */
+    @DisplayName("배열로 스트림 만들기")
+    @Test
+    public void arrayToStream(){
+        //given
+        int[] arr = new int[] {1,2,3,4,5,6,7,8,9,10};
+        //when
+        int sum = Arrays.stream(arr).sum();
+
+        //then
+        Assertions.assertThat(sum).isEqualTo(55);
+    }
+
+    /**
+     * 5.8.4 파일로 스트림 만들기
+     */
+    @DisplayName("파일로 스트림 만들기")
+    @Test
+    public void fileToStream(){
+        //given
+        long uniqueWords = 0;
+        try(Stream<String> lines =
+                Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {
+            uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
+                    .distinct()
+                    .count();
+        } catch (IOException e) {
+        }
+
+    }
+    /**
+     * 5.8.5 무한 스트림 만들기
+     */
+    @DisplayName("무한 스트림 만들기")
+    @Test
+    public void useUnlimitedStream(){
+        Stream.iterate(0, n-> n+2)
+                .limit(20)
+                .forEach(n -> System.out.println(n));
+    }
+
+    /**
+     * 퀴즈 5.4 피보나치수열 집합을 만들자. / iterate - 값을 받아 새로운 값을 생성. 연속적으로 계산.
+     * problem : 피보나치 수열의 집합 (0,1), (1,1), (1,2) ... 을 만들어라
+     * logic : Stream - iterate - limit - foreach
+     */
+    @DisplayName("피보나치수열 집합을 만들자.")
+    @Test
+    public void makeFiboSet(){
+        //use iterate
+        Stream.iterate(new int[] {0,1} ,arr -> 4000> arr[0], arr -> new int[] {arr[1], arr[0]+arr[1]})
+                .limit(20)
+                .forEach(arr -> System.out.println("( " + arr[0] + ", "+ arr[1] + " )"));
+
+    }
+
+    /**
+     * 5.8.5 iterate 메서드 - 값을 받아 새로운 값을 생성. 연속적으로 계산.
+     * problem : iterate 메서드를 사용해보자
+     * logic : IntStream - iterate - takeWhile - foreach
+     */
+    @DisplayName("generate 메서드")
+    @Test
+    public void useIterate(){
+        //given
+        IntStream.iterate(0, n->n+4)
+                .takeWhile(n -> n<100)
+                .forEach(System.out::println);
+
+        IntStream.iterate(0, n-> n+3)
+                .filter(n -> n<10)
+                .limit(3)
+                .forEach(System.out::println);
+    }
+
+    /**
+     * 5.8.5 generate 메서드 - iterate와 마찬가지로 값을 받아 새로운 값을 생성 but, 연속적으로 계산하지 않음.
+     * problem : generate 메서드를 사용해보자
+     * logic :  Stream - generate - limit - for
+     */
+    @DisplayName("generate 메서드")
+    @Test
+    public void useGenerate(){
+        //given
+        Stream.generate(() -> Math.random())
+                .limit(10)
+                .forEach(System.out::println);
+
+        //when
+
+        //then
+
+    }
 }
 
 
