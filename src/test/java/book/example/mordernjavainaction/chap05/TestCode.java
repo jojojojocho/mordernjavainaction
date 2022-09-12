@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -1217,6 +1218,36 @@ public class TestCode {
                 .forEach(System.out::println);
 
     }
+
+    /**
+     * 5.8.5 generate 메서드 - iterate와 마찬가지로 값을 받아 새로운 값을 생성 but, 연속적으로 계산하지 않음.
+     * problem : generate 메서드를 사용하여 피보나치 수열을 만들어보자.
+     *          -> 이 문제에서는 상태를 가진 Supplier를 사용하지만 병렬코드에서는 supplier에 상태가 있으면 안전하지 않다.
+     *           그러므로 실제로는 사용하면 안되는 코드이다.
+     * logic :  IntSupplier를 가변성있게 선언한 후 IntStream - generate
+     */
+    @DisplayName("gernerate 메서드를 이용한 피보나치 수열")
+    @Test
+    public void gernerateFibo(){
+        //given
+        IntSupplier fibo = new IntSupplier(){
+            private int firstOne = 0;
+            private int nextOne = 1;
+
+            @Override
+            public int getAsInt() {
+                int oldOne = this.firstOne;
+                this.firstOne = this.nextOne;
+                this.nextOne = this.firstOne + oldOne;
+                return oldOne;
+            }
+        };
+
+        //when
+        IntStream.generate(fibo).limit(10).forEach(s -> System.out.println(s));
+    }
+
+
 }
 
 
