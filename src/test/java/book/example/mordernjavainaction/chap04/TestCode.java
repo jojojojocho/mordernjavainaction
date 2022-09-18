@@ -33,19 +33,14 @@ public class TestCode {
             }
         }
         //lowCaloricDishes<Dish>를 칼로리 기준 오름차순으로 정렬
-        Collections.sort(lowCaloricDishes, new Comparator<Dish>() {
-            @Override
-            public int compare(Dish dish1, Dish dish2) {
-                return Integer.compare(dish1.getCalories(), dish2.getCalories());
-            }
-        });
+        lowCaloricDishes.sort(comparingInt(Dish::getCalories));
         //오름차순 정렬이 완료된 lowCaloricDishes<Dish>를 lowCaloricDishName<String>에 저장.
         List<String> lowCaloricDishName = new ArrayList<>();
         for (Dish dish : lowCaloricDishes) {
             lowCaloricDishName.add(dish.getName());
         }
         //결과 : 칼로리 오름차순으로 정렬된 lowCaloricDish가 만들어짐.
-        lowCaloricDishName.stream().forEach(ascDishName -> System.out.println("***dishName(ASC) : " + ascDishName));
+        lowCaloricDishName.forEach(ascDishName -> System.out.println("***dishName(ASC) : " + ascDishName));
         //***dishName(ASC) : season fruit
         //***dishName(ASC) : prawns
         //***dishName(ASC) : rice
@@ -59,10 +54,10 @@ public class TestCode {
         List<String> lowCaloricDishesName = menu.stream()
                 .filter(dish -> dish.getCalories() < 400) //칼로리가 400이하인 것들로만 필터링(400칼로리 이하의 요리 선택)
                 .sorted(comparing(Dish::getCalories))  //칼로리를 기준으로 오름차순 정렬 (칼로리로 요리 정렬)
-                .map(dish -> dish.getName()) // dish -> dish.getName (요리명 추출)
+                .map(Dish::getName) // dish -> dish.getName (요리명 추출)
                 .collect(toList()); // 리스트로 collect (모든 요리명을 리스트에 저장)
 
-        lowCaloricDishesName.stream().
+        lowCaloricDishesName.
                 forEach(dishName -> System.out.println("***dishName(ASC) : " + dishName));
         //***dishName(ASC) : season fruit
         //***dishName(ASC) : prawns
@@ -93,7 +88,7 @@ public class TestCode {
             dishNames.add(dish.getName());      // 요리의 이름들을 dishNames 리스트에 담음.
         }
         AtomicInteger index = new AtomicInteger();
-        dishNames.stream().forEach(
+        dishNames.forEach(
                 dishname -> Assertions.assertThat(menu.get(index.getAndIncrement()).getName()).isEqualTo(dishname)   //dishNames를 순회하면서 이름을 출력
         );
 //        for (int i =0; i<menu.size(); i++){
@@ -129,7 +124,7 @@ public class TestCode {
         List<String> dishNames = menu.stream()      //menu 스트림 생성.
                 .map(Dish::getName)         //dish 객체를 dish.getname의 리턴값으로 매핑해준다.
                 .collect(toList());         //리스트로 collect
-        dishNames.stream()
+        dishNames
                 .forEach(System.out::println);// dishNames를 순회하면서 각 요소의 이름을 출력
 
 //        AtomicInteger index = new AtomicInteger();

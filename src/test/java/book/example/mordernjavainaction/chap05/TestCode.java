@@ -1148,14 +1148,22 @@ public class TestCode {
     @DisplayName("파일로 스트림 만들기")
     @Test
     public void fileToStream(){
+
         //given
         long uniqueWords = 0;
         try(Stream<String> lines =
-                Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {
+                Files.lines(Paths.get("C:\\book\\mordernjavainaction\\src\\test\\java\\book\\example\\mordernjavainaction\\chap05/data.txt"), Charset.defaultCharset())) {
             uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
                     .distinct()
                     .count();
+            System.out.println(uniqueWords);
+            System.out.println(Paths
+                    .get("C:\\book\\mordernjavainaction\\src\\test\\java\\book\\example\\mordernjavainaction\\chap05/data.txt").getParent());
+            System.out.println(Paths
+                    .get("C:\\book\\mordernjavainaction\\src\\test\\java\\book\\example\\mordernjavainaction\\chap05/data.txt").getRoot());
         } catch (IOException e) {
+            System.out.println("실패");
+            e.getStackTrace();
         }
 
     }
