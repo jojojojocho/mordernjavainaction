@@ -29,7 +29,7 @@ public class TestCode {
         Comparator<Dish> caloriesComparator = Comparator.comparingInt(Dish::getCalories);
 
         //when
-        Optional<Dish> maxCaloriesDish = menu.stream().collect(Collectors.maxBy(caloriesComparator));
+        Dish maxCaloriesDish = menu.stream().collect(Collectors.maxBy(caloriesComparator)).orElseThrow();
 
         //then
         System.out.println(maxCaloriesDish);
@@ -45,10 +45,15 @@ public class TestCode {
         Comparator<Dish> caloriesComparator = Comparator.comparingInt(Dish::getCalories);
 
         //when
-        Optional<Dish> minCaloriesDish = menu.stream().collect(Collectors.minBy(caloriesComparator));
+        Dish minCaloriesDish = menu.stream().collect(Collectors.minBy(caloriesComparator)).orElseThrow();
 
         //then
         System.out.println(minCaloriesDish);
     }
+
+    /**
+     * 6.2.2 요약 연산.
+     */
+    
 
 }
