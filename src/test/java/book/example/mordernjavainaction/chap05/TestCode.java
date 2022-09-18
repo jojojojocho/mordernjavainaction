@@ -274,7 +274,6 @@ public class TestCode {
         for (int i = 0; i < menu.size(); i++) {
             assertThat(menu.get(i).getName()).isEqualTo(dishNames.get(i));
         }
-
     }
 
     /**
@@ -330,11 +329,6 @@ public class TestCode {
 
     /**
      * 5.3.2 스트림 평면화
-     * 요구사항 (문제) : .
-     * 로직 : stream - map - map - collect 사용
-     * 예상 되는 결과 값: 요리 이름의 길이로 이루어진 리스트.
-     * 검증방법 : menu 리스트를 순회하면서 요리 이름의 길이가 맞는지 비교.
-     * <p>
      * 요구사항 (문제) : String타입의 단어로 이루어진 리스트를 받아 고유문자로 매핑해 반환.
      * 로직 : stream - map(split("")) - map(Arrays.stream) - distinct() - collect(toList)
      * 예상 되는 결과 값:
@@ -486,6 +480,7 @@ public class TestCode {
                 }
             }
         }
+
         /**
          * 5.2 퀴즈 3번 문제: 매핑
          * 요구사항 : 5.2 퀴즈 2번 문제의 결과 값 중 pair의 합을 3으로 나누었을 때, 나머지가 0인 pair만 반환하시오.
@@ -1157,7 +1152,6 @@ public class TestCode {
                     .count();
         } catch (IOException e) {
         }
-
     }
     /**
      * 5.8.5 무한 스트림 만들기
