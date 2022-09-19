@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -19,7 +18,7 @@ public class TestCode {
 
 
     /**
-     * 6.2.1 스트림 값에서 최댓값과 최솟값 검색.
+     * 6.2.1 스트림 값에서 최댓값과 최솟값 검색. - Collectors.maxBy()
      */
     @DisplayName("칼로리가 제일 높은 요리 구하기.")
     @Test
@@ -35,7 +34,7 @@ public class TestCode {
     }
 
     /**
-     * 6.2.1 스트림 값에서 최댓값과 최솟값 검색.
+     * 6.2.1 스트림 값에서 최댓값과 최솟값 검색. - Collectors.minBy()
      */
     @DisplayName("칼로리가 제일 낮은 요리 구하기")
     @Test
@@ -51,11 +50,11 @@ public class TestCode {
     }
 
     /**
-     * 6.2.2 요약 연산
+     * 6.2.2 요약 연산 - Collectors.summingInt()
      */
     @DisplayName("요리의 칼로리 총합 구하기 (Integer)")
     @Test
-    public void sumOfDishCaloriesInt() {
+    public void CalculateSumOfDishCaloriesInt() {
         // when
         Integer sumOfDishCal = menu.stream().collect(Collectors.summingInt(Dish::getCalories));
 
@@ -65,11 +64,11 @@ public class TestCode {
     }
 
     /**
-     * 6.2.2 요약 연산
+     * 6.2.2 요약 연산 - Collectors.SummingLong()
      */
     @DisplayName("요리의 칼로리 총합 구하기 (Long)")
     @Test
-    public void sumOfDishCaloriesLong() {
+    public void CalculateSumOfDishCaloriesLong() {
         // when
         Long sumOfDishCal = menu.stream().collect(Collectors.summingLong(Dish::getCalories));
 
@@ -78,11 +77,11 @@ public class TestCode {
     }
 
     /**
-     * 6.2.2 요약 연산
+     * 6.2.2 요약 연산 - Collectors.SummingDouble
      */
     @DisplayName("요리의 칼로리 총합 구하기(Double)")
     @Test
-    public void sumOfDishCaloriesDouble() {
+    public void CalculateSumOfDishCaloriesDouble() {
         // when
         Double sumOfDishCal = menu.stream().collect(Collectors.summingDouble(Dish::getCalories));
 
@@ -92,11 +91,11 @@ public class TestCode {
     }
 
     /**
-     * 6.2.2 요약 연산
+     * 6.2.2 요약 연산 - Collectors.averagingInt()
      */
     @DisplayName("요리의 칼로리 평균 구하기(Int, Long, Double)")
     @Test
-    public void avgOfDishCalories() {
+    public void CalculateAvgOfDishCalories() {
         // when
         Double avgOfDishCalInt = menu.stream().collect(Collectors.averagingInt(Dish::getCalories));
         Double avgOfDishCalLong = menu.stream().collect(Collectors.averagingLong(Dish::getCalories));
@@ -109,7 +108,7 @@ public class TestCode {
     }
 
     /**
-     * 6.2.2 요약 연산
+     * 6.2.2 요약 연산 - Collectors.summarizingInt()
      */
     @DisplayName("두 개 이상의 연산을 한번에 수행")
     @Test
@@ -132,7 +131,7 @@ public class TestCode {
     }
 
     /**
-     * 6.2.3 문자열 연결
+     * 6.2.3 문자열 연결 - Collectors.joining()
      */
     @DisplayName("모든 요리의 이름을 연결하기.")
     @Test
@@ -154,6 +153,35 @@ public class TestCode {
         // then
         System.out.println(joiningDishNames); // JoinedName : pork,beef,chicken,french_fries,rice,seasonfruit,pizza,prawns,salmon
     }
+
+    /**
+     * 6.2.4 범용 리듀싱 요약 연산. - Collectors.reducing()
+     */
+    @DisplayName("메뉴의 모든 칼로리 합계")
+    @Test
+    public void CalculateSumOfDishCalories(){
+        //when
+        Integer sumOfDishCal = menu.stream().collect(Collectors.reducing(0, Dish::getCalories, (a, b) -> a + b));
+
+        //then
+        System.out.println(sumOfDishCal);
+        Assertions.assertThat(sumOfDishCal).isEqualTo(4200);
+    }
+
+    /**
+     * 6.2.4 범용 리듀싱 요약 연산. - Collectors.reducing()
+     */
+    @DisplayName("한개의 인수를 가진 reducing 이용하기.")
+    @Test
+    public void  findDishOfMaxCalories(){
+        //when
+        Dish dishOfMaxCal = menu.stream()
+                .collect(Collectors.reducing(((dish, dish2) -> dish.getCalories() > dish2.getCalories() ? dish : dish2)))
+                .orElseThrow();
+        //then
+        System.out.println(dishOfMaxCal);
+    }
+
 
 
 
