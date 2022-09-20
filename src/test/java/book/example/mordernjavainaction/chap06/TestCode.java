@@ -160,10 +160,10 @@ public class TestCode {
     @DisplayName("메뉴의 모든 칼로리 합계")
     @Test
     public void CalculateSumOfDishCalories(){
-        //when
+        // when
         Integer sumOfDishCal = menu.stream().collect(Collectors.reducing(0, Dish::getCalories, (a, b) -> a + b));
 
-        //then
+        // then
         System.out.println(sumOfDishCal);
         Assertions.assertThat(sumOfDishCal).isEqualTo(4200);
     }
@@ -173,16 +173,33 @@ public class TestCode {
      */
     @DisplayName("한개의 인수를 가진 reducing 이용하기.")
     @Test
-    public void  findDishOfMaxCalories(){
-        //when
+    public void findDishOfMaxCalories(){
+        // when
         Dish dishOfMaxCal = menu.stream()
                 .collect(Collectors.reducing(((dish, dish2) -> dish.getCalories() > dish2.getCalories() ? dish : dish2)))
                 .orElseThrow();
-        //then
+        // then
         System.out.println(dishOfMaxCal);
     }
+    /**
+     *  6.2.4 범용 리듀싱 요약 연산. - Collectors.reducing()
+     */
+    @DisplayName("컬렉션 프레임워크 유연성 : 같은 연산도 다양한 방식으로 수행할 수 있다.")
+    @Test
+    public void CalculateTotalCalOfMenu(){
+        // when
+        Integer totalCaloriesOfMenu = menu.stream()
+                .collect(Collectors
+                        .reducing(0,
+                                Dish::getCalories,
+                                Integer::sum));
 
+        // then
+        System.out.println(totalCaloriesOfMenu); // 4200
+    }
 
-
+    /**
+     * 
+     */
 
 }
