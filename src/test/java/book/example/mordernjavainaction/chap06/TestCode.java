@@ -145,10 +145,10 @@ public class TestCode {
          * String - 문자열 연산이 적고 멀티쓰레드 환경일 경우
          * StringBuffer - 문자열 연산이 많고 멀티쓰레드 환경일 경우
          * StringBuilder - 문자열 연산이 많고 단일쓰레드이거나 동기화를 고려하지 않아도 되는 경우
-        */
+         */
         String joiningDishNames = menu.stream()
                 .map(dish -> dish.getName().replaceAll(" ", ""))
-                .collect(Collectors.joining(",","JoinedName : ", ""));
+                .collect(Collectors.joining(",", "JoinedName : ", ""));
 
         // then
         System.out.println(joiningDishNames); // JoinedName : pork,beef,chicken,french_fries,rice,seasonfruit,pizza,prawns,salmon
@@ -159,7 +159,7 @@ public class TestCode {
      */
     @DisplayName("메뉴의 모든 칼로리 합계")
     @Test
-    public void CalculateSumOfDishCalories(){
+    public void CalculateSumOfDishCalories() {
         // when
         Integer sumOfDishCal = menu.stream().collect(Collectors.reducing(0, Dish::getCalories, (a, b) -> a + b));
 
@@ -173,33 +173,95 @@ public class TestCode {
      */
     @DisplayName("한개의 인수를 가진 reducing 이용하기.")
     @Test
-    public void findDishOfMaxCalories(){
+    public void findDishOfMaxCalories() {
         // when
         Dish dishOfMaxCal = menu.stream()
                 .collect(Collectors.reducing(((dish, dish2) -> dish.getCalories() > dish2.getCalories() ? dish : dish2)))
                 .orElseThrow();
+
         // then
-        System.out.println(dishOfMaxCal);
+        System.out.println(dishOfMaxCal); // pork
     }
+
     /**
-     *  6.2.4 범용 리듀싱 요약 연산. - Collectors.reducing()
+     * 6.2.4 범용 리듀싱 요약 연산. - Collectors.reducing()
+     * 컬렉션 프레임워크 유연성 : 같은 연산도 다양한 방식으로 수행할 수 있다.
+     * 메뉴 칼로리의 합계 구하기.
      */
-    @DisplayName("컬렉션 프레임워크 유연성 : 같은 연산도 다양한 방식으로 수행할 수 있다.")
+    @DisplayName("The sum of calories of the menu.")
     @Test
-    public void CalculateTotalCalOfMenu(){
+    public void CalculateTotalCalOfMenu() {
         // when
-        Integer totalCaloriesOfMenu = menu.stream()
-                .collect(Collectors
-                        .reducing(0,
-                                Dish::getCalories,
-                                Integer::sum));
+        Integer totalCaloriesOfMenu
+                = menu.stream()
+                .collect(Collectors.reducing(0,
+                        Dish::getCalories,
+                        Integer::sum));
 
         // then
         System.out.println(totalCaloriesOfMenu); // 4200
+        Assertions.assertThat(totalCaloriesOfMenu).isEqualTo(4200);
     }
 
     /**
-     * 
+     * 6.2.4 범용 리듀싱 요약 연산 - stream().map().reduce()
+     * 메뉴 칼로리의 합계 구하기.
+     */
+    @DisplayName("the sum of calories of the menu")
+    @Test
+    public void CalculateSumOfCalOfMenuUsingMapAndReduce() {
+        // when
+        Integer sumOfCalOfMenu
+                = menu.stream()
+                .map(Dish::getCalories)
+                .reduce(Integer::sum)
+                .orElse(0);
+        // then
+        System.out.println(sumOfCalOfMenu); // 4200
+        Assertions.assertThat(sumOfCalOfMenu).isEqualTo(4200);
+    }
+
+    /**
+     * 6.2.4 범용 리듀싱 요약 연산 - stream().mapToInt().sum()
+     * 메뉴 칼로리의 합계 구하기.
+     */
+    @DisplayName("The sum of calories of the menu")
+    @Test
+    public void calculateSumOfCalOfMenu(){
+        // when
+        int sumOfCalOfMenu = menu.stream().mapToInt(Dish::getCalories).sum();
+
+        // then
+        System.out.println(sumOfCalOfMenu); // 4200
+        Assertions.assertThat(sumOfCalOfMenu).isEqualTo(4200);
+    }
+
+    /**
+     * 퀴즈 6-1 리듀싱으로 문자열 연결하기.
+     */
+    @DisplayName("6.2.3에서 사용한 reducing 컬렉터가 올바른 코드 찾기.")
+    @Test
+    public void joiningTheStrings(){
+        // when
+        String method1 = menu.stream()
+                .map(Dish::getName)
+                .collect(Collectors.reducing((s1, s2) -> s1 + s2))
+                .get();
+
+//        String method2 = menu.stream()
+//                .collect(Collectors.reducing(((d1, d2) ->d1.getName() + d2.getName() )))
+//                .get();
+
+        String method3 = menu.stream().collect(Collectors.reducing("",Dish::getName, (s1,s2) -> s1 +","+s2));
+
+        // then
+        System.out.println(method1); // porkbeefchickenfrench_friesriceseason fruitpizzaprawnssalmon
+//        System.out.println(method2); // 컴파일 오류
+        System.out.println(method3); // ,pork,beef,chicken,french_fries,rice,season fruit,pizza,prawns,salmon
+    }
+
+    /**
+     * 6.3 그룹화
      */
 
 }
