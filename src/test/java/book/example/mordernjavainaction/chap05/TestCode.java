@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestCode {
 
-    List<Dish> menu = new Dish().makeDishes();
+    List<Dish> menu = new Dish().makeDish();
     List<Dish> specialMenu = Arrays.asList(
             new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
             new Dish("prawns", false, 300, Dish.Type.FISH),
@@ -36,33 +36,33 @@ public class TestCode {
 
     /**
      * 데이터 컬렉션 반복을 명시적으로 관리하는 외부 반복코드와 내부 반복 코드 비교
-     * 요구사항 : 외부 반복의 vegetarianDishes와 내부반복의 vegetarianDishes의 데이터가 같은지 비교.
+     * 요구사항 : 외부 반복의 vegetarianDish와 내부반복의 vegetarianDish의 데이터가 같은지 비교.
      */
     @DisplayName("외부 반복 코드와 내부 반복 코드 비교")
     @Test
     public void useExternalForeach() {
 
         //given
-        List<Dish> vegetarianDishesUseForeach = new ArrayList<>(); // 외부 반복
-        List<Dish> vegetarianDishesUseStream; // 내부 반복
+        List<Dish> vegetarianDishUseForeach = new ArrayList<>(); // 외부 반복
+        List<Dish> vegetarianDishUseStream; // 내부 반복
 
         //when
-        // 채식이면 vegetarianDishesUseForeach 리스트에 추가 (외부 반복 코드)
+        // 채식이면 vegetarianDishUseForeach 리스트에 추가 (외부 반복 코드)
         for (Dish dish : menu) {
             if (dish.isVegetarian()) {
-                vegetarianDishesUseForeach.add(dish);
+                vegetarianDishUseForeach.add(dish);
             }
         }
 
-        // 채식이면 vegetarianDishesUseStream 리스트에 추가 (내부 반복 코드)
-        vegetarianDishesUseStream = menu.stream()
+        // 채식이면 vegetarianDishUseStream 리스트에 추가 (내부 반복 코드)
+        vegetarianDishUseStream = menu.stream()
                 .filter(Dish::isVegetarian)
                 .collect(Collectors.toList());
 
         //then
         //외부 반복과 내부반복 각 인덱스의 요리 이름 비교
-        for (int i = 0; i < vegetarianDishesUseForeach.size(); i++) {
-            assertThat(vegetarianDishesUseForeach.get(i)).isEqualTo(vegetarianDishesUseStream.get(i));
+        for (int i = 0; i < vegetarianDishUseForeach.size(); i++) {
+            assertThat(vegetarianDishUseForeach.get(i)).isEqualTo(vegetarianDishUseStream.get(i));
         }
     }
 
@@ -181,18 +181,18 @@ public class TestCode {
 
         //when
         //칼로리가 300초과 인 요리들을 N개 가져와서 리스트로 반환
-        List<Dish> dishes = specialMenu.stream()
+        List<Dish> Dish = specialMenu.stream()
                 .filter(dish -> dish.getCalories() >= 300)
                 .limit(n)
                 .collect(Collectors.toList());
 
         //then
         //리스트의 각 요소들이 300칼로리 이상인지 확인
-        dishes.stream().forEach(dish -> assertThat(dish.getCalories() >= 300));
-        dishes.stream().forEach(dish -> System.out.println(dish.getName()));
+        Dish.stream().forEach(dish -> assertThat(dish.getCalories() >= 300));
+        Dish.stream().forEach(dish -> System.out.println(dish.getName()));
 
         //리스트의 사이즈가 N인지 확인.
-//        Assertions.assertThat(dishes.stream().count()).isEqualTo(N);
+//        Assertions.assertThat(Dish.stream().count()).isEqualTo(N);
     }
 
     /**
@@ -208,17 +208,17 @@ public class TestCode {
         long n = 2;
 
         //when
-        List<Dish> dishes = menu.stream().filter(dish -> dish.getCalories() > 300)
+        List<Dish> Dish = menu.stream().filter(dish -> dish.getCalories() > 300)
                 .skip(n)                        //n개 만큼 건너뜀.
                 .collect(Collectors.toList());
 
         //then
         assertThat(menu.stream()
                 .filter(dish -> dish.getCalories() > 300)
-                .count()).isEqualTo(dishes.size() + n);
+                .count()).isEqualTo(Dish.size() + n);
 
-        dishes.stream().forEach(dish -> assertThat(dish.getCalories() > 300));
-        dishes.stream().forEach(dish -> System.out.println(dish.getName()));
+        Dish.stream().forEach(dish -> assertThat(dish.getCalories() > 300));
+        Dish.stream().forEach(dish -> System.out.println(dish.getName()));
     }
 
     /**

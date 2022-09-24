@@ -27,13 +27,13 @@
 #      @Test
 # -    public void java7() {
 # +    public void java7(){
-#          List<Dish> lowCaloricDishes = new ArrayList<>();
-#          //lowCaloricDishes에 dish객체(메뉴)를 받음
+#          List<Dish> lowCaloricDish = new ArrayList<>();
+#          //lowCaloricDish에 dish객체(메뉴)를 받음
 # -        for (Dish dish : menu) {
 # +        for(Dish dish : menu){
 #              //칼로리가 400이하인 것들만 필터링
 # -            if (dish.getCalories() < 400) {
 # +            if(dish.getCalories()<400) {
-#                  lowCaloricDishes.add(dish);
+#                  lowCaloricDish.add(dish);
 #              }
 #          }

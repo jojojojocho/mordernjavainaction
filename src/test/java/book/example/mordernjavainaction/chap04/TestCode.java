@@ -19,24 +19,24 @@ import static java.util.stream.Collectors.*;
 public class TestCode {
 
 
-    List<Dish> menu = new Dish().makeDishes();
+    List<Dish> menu = new Dish().makeDish();
 
     @DisplayName("자바 7코드")
     @Test
     public void java7() {
-        List<Dish> lowCaloricDishes = new ArrayList<>();
-        //lowCaloricDishes에 dish객체(메뉴)를 받음
+        List<Dish> lowCaloricDish = new ArrayList<>();
+        //lowCaloricDish에 dish객체(메뉴)를 받음
         for (Dish dish : menu) {
             //칼로리가 400이하인 것들만 필터링
             if (dish.getCalories() < 400) {
-                lowCaloricDishes.add(dish);
+                lowCaloricDish.add(dish);
             }
         }
-        //lowCaloricDishes<Dish>를 칼로리 기준 오름차순으로 정렬
-        lowCaloricDishes.sort(comparingInt(Dish::getCalories));
-        //오름차순 정렬이 완료된 lowCaloricDishes<Dish>를 lowCaloricDishName<String>에 저장.
+        //lowCaloricDish<Dish>를 칼로리 기준 오름차순으로 정렬
+        lowCaloricDish.sort(comparingInt(Dish::getCalories));
+        //오름차순 정렬이 완료된 lowCaloricDish<Dish>를 lowCaloricDishName<String>에 저장.
         List<String> lowCaloricDishName = new ArrayList<>();
-        for (Dish dish : lowCaloricDishes) {
+        for (Dish dish : lowCaloricDish) {
             lowCaloricDishName.add(dish.getName());
         }
         //결과 : 칼로리 오름차순으로 정렬된 lowCaloricDish가 만들어짐.
@@ -51,19 +51,19 @@ public class TestCode {
     @DisplayName("자바 8코드")
     @Test
     public void java8(){
-        List<String> lowCaloricDishesName = menu.stream()
+        List<String> lowCaloricDishName = menu.stream()
                 .filter(dish -> dish.getCalories() < 400) //칼로리가 400이하인 것들로만 필터링(400칼로리 이하의 요리 선택)
                 .sorted(comparing(Dish::getCalories))  //칼로리를 기준으로 오름차순 정렬 (칼로리로 요리 정렬)
                 .map(Dish::getName) // dish -> dish.getName (요리명 추출)
                 .collect(toList()); // 리스트로 collect (모든 요리명을 리스트에 저장)
 
-        lowCaloricDishesName.
+        lowCaloricDishName.
                 forEach(dishName -> System.out.println("***dishName(ASC) : " + dishName));
         //***dishName(ASC) : season fruit
         //***dishName(ASC) : prawns
         //***dishName(ASC) : rice
 
-        Assertions.assertThat(lowCaloricDishesName.stream().count()).isEqualTo(3);
+        Assertions.assertThat(lowCaloricDishName.stream().count()).isEqualTo(3);
     }
 
 
@@ -138,15 +138,15 @@ public class TestCode {
     @DisplayName("외부반복을 내부반복으로 변환(외부반복코드)")
     @Test
     public void externalIterator(){
-        List<String> highCaloriDishes = new ArrayList<>(); //조건에 해당하는 String을 담을 리스트변수
+        List<String> highCaloriDish = new ArrayList<>(); //조건에 해당하는 String을 담을 리스트변수
         Iterator<Dish> iterator = menu.iterator();  //menu로 부터 iterator를 가져온다
         while (iterator.hasNext()){
             Dish dish = iterator.next();
             if(dish.getCalories() > 300){
-                highCaloriDishes.add(dish.getName());       //칼로리가 300보다 큰 요리들을 highCaloriDishes에 추가
+                highCaloriDish.add(dish.getName());       //칼로리가 300보다 큰 요리들을 highCaloriDish에 추가
             }
         }
-        highCaloriDishes.stream().forEach(System.out::println); // highCaloriDishes 리스트에 있는 요리의 이름들을 출력
+        highCaloriDish.stream().forEach(System.out::println); // highCaloriDish 리스트에 있는 요리의 이름들을 출력
 
 
     }
@@ -154,12 +154,12 @@ public class TestCode {
     @DisplayName("외부반복을 내부반복으로 변환(내부반복코드)")
     @Test
     public void  internalIterator(){
-        List<String> highCaloriDishes = menu.stream()   //요리의 스트림을 가져온다
+        List<String> highCaloriDish = menu.stream()   //요리의 스트림을 가져온다
                 .filter(dish -> dish.getCalories() > 300)   // 요리의 스트림에서 요리의 칼로리가 300이 넘는 요리들만 필터링
                 .map(dish -> dish.getName())        //필터링 된 요리객체를 요리 이름으로 매핑
                 .collect(toList());         //리스트로 collect
 
-        highCaloriDishes.stream().forEach(System.out::println);  //highCaloriDishes 를 출력
+        highCaloriDish.stream().forEach(System.out::println);  //highCaloriDish 를 출력
     }
 
 
