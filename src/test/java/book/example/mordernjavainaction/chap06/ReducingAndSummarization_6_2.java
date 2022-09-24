@@ -6,7 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * 6.2 리듀싱과 요약
@@ -28,7 +29,10 @@ public class ReducingAndSummarization_6_2 {
         Comparator<Dish> caloriesComparator = Comparator.comparingInt(Dish::getCalories);
 
         // when
-        Dish dishOfMaxCal = menu.stream().collect(Collectors.maxBy(caloriesComparator)).orElseThrow();
+        Dish dishOfMaxCal =
+                menu.stream()
+                        .collect(maxBy(caloriesComparator)).
+                        orElseThrow();
 
         // then
         System.out.println(dishOfMaxCal); // pork
@@ -44,7 +48,9 @@ public class ReducingAndSummarization_6_2 {
         Comparator<Dish> caloriesComparator = Comparator.comparingInt(Dish::getCalories);
 
         // when
-        Dish minOfDishCal = menu.stream().collect(Collectors.minBy(caloriesComparator)).orElseThrow();
+        Dish minOfDishCal =
+                menu.stream()
+                        .collect(minBy(caloriesComparator)).orElseThrow();
 
         // then
         System.out.println(minOfDishCal); // season fruit
@@ -57,7 +63,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateSumOfDishCaloriesInt() {
         // when
-        Integer sumOfDishCal = menu.stream().collect(Collectors.summingInt(Dish::getCalories));
+        Integer sumOfDishCal =
+                menu.stream()
+                        .collect(summingInt(Dish::getCalories));
 
         // then
         System.out.println(sumOfDishCal); // 4200
@@ -71,7 +79,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateSumOfDishCaloriesLong() {
         // when
-        Long sumOfDishCal = menu.stream().collect(Collectors.summingLong(Dish::getCalories));
+        Long sumOfDishCal =
+                menu.stream()
+                        .collect(summingLong(Dish::getCalories));
 
         // then
         System.out.println(sumOfDishCal); // 4200
@@ -84,7 +94,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateSumOfDishCaloriesDouble() {
         // when
-        Double sumOfDishCal = menu.stream().collect(Collectors.summingDouble(Dish::getCalories));
+        Double sumOfDishCal =
+                menu.stream()
+                        .collect(summingDouble(Dish::getCalories));
 
         // then
         System.out.println(sumOfDishCal); // 4200.0
@@ -98,9 +110,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateAvgOfDishCalories() {
         // when
-        Double avgOfDishCalInt = menu.stream().collect(Collectors.averagingInt(Dish::getCalories));
-        Double avgOfDishCalLong = menu.stream().collect(Collectors.averagingLong(Dish::getCalories));
-        Double avgOfDishCalDouble = menu.stream().collect(Collectors.averagingDouble(Dish::getCalories));
+        Double avgOfDishCalInt = menu.stream().collect(averagingInt(Dish::getCalories));
+        Double avgOfDishCalLong = menu.stream().collect(averagingLong(Dish::getCalories));
+        Double avgOfDishCalDouble = menu.stream().collect(averagingDouble(Dish::getCalories));
 
         // then
         System.out.println(avgOfDishCalInt); // 466.6666666666667
@@ -115,9 +127,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void calculateSummaryOfDishCalories() {
         // when
-        IntSummaryStatistics summaryInt = menu.stream().collect(Collectors.summarizingInt(Dish::getCalories));
-        LongSummaryStatistics summaryLong = menu.stream().collect(Collectors.summarizingLong(Dish::getCalories));
-        DoubleSummaryStatistics summaryDouble = menu.stream().collect(Collectors.summarizingDouble(Dish::getCalories));
+        IntSummaryStatistics summaryInt = menu.stream().collect(summarizingInt(Dish::getCalories));
+        LongSummaryStatistics summaryLong = menu.stream().collect(summarizingLong(Dish::getCalories));
+        DoubleSummaryStatistics summaryDouble = menu.stream().collect(summarizingDouble(Dish::getCalories));
 
         // then
         System.out.println(summaryInt); // IntSummaryStatistics{count=9, sum=4200, min=120, average=466.666667, max=800}
@@ -147,9 +159,10 @@ public class ReducingAndSummarization_6_2 {
          * StringBuffer - 문자열 연산이 많고 멀티쓰레드 환경일 경우
          * StringBuilder - 문자열 연산이 많고 단일쓰레드이거나 동기화를 고려하지 않아도 되는 경우
          */
-        String joiningDishNames = menu.stream()
-                .map(dish -> dish.getName().replaceAll(" ", ""))
-                .collect(Collectors.joining(",", "JoinedName : ", ""));
+        String joiningDishNames =
+                menu.stream()
+                        .map(dish -> dish.getName().replaceAll(" ", ""))
+                        .collect(joining(",", "JoinedName : ", ""));
 
         // then
         System.out.println(joiningDishNames); // JoinedName : pork,beef,chicken,french_fries,rice,seasonfruit,pizza,prawns,salmon
@@ -162,7 +175,9 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateSumOfDishCalories() {
         // when
-        Integer sumOfDishCal = menu.stream().collect(Collectors.reducing(0, Dish::getCalories, (a, b) -> a + b));
+        Integer sumOfDishCal =
+                menu.stream()
+                        .collect(reducing(0, Dish::getCalories, (a, b) -> a + b));
 
         // then
         System.out.println(sumOfDishCal);
@@ -176,9 +191,10 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void findDishOfMaxCalories() {
         // when
-        Dish dishOfMaxCal = menu.stream()
-                .collect(Collectors.reducing(((dish, dish2) -> dish.getCalories() > dish2.getCalories() ? dish : dish2)))
-                .orElseThrow();
+        Dish dishOfMaxCal =
+                menu.stream()
+                        .collect(reducing(((dish, dish2) -> dish.getCalories() > dish2.getCalories() ? dish : dish2)))
+                        .orElseThrow();
 
         // then
         System.out.println(dishOfMaxCal); // pork
@@ -193,11 +209,12 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateTotalCalOfMenu() {
         // when
-        Integer totalCaloriesOfMenu
-                = menu.stream()
-                .collect(Collectors.reducing(0,
-                        Dish::getCalories,
-                        Integer::sum));
+        Integer totalCaloriesOfMenu =
+                menu.stream()
+                        .collect(
+                                reducing(0,
+                                        Dish::getCalories,
+                                        Integer::sum));
 
         // then
         System.out.println(totalCaloriesOfMenu); // 4200
@@ -212,11 +229,11 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void CalculateSumOfCalOfMenuUsingMapAndReduce() {
         // when
-        Integer sumOfCalOfMenu
-                = menu.stream()
-                .map(Dish::getCalories)
-                .reduce(Integer::sum)
-                .orElse(0);
+        Integer sumOfCalOfMenu =
+                menu.stream()
+                        .map(Dish::getCalories)
+                        .reduce(Integer::sum)
+                        .orElse(0);
         // then
         System.out.println(sumOfCalOfMenu); // 4200
         Assertions.assertThat(sumOfCalOfMenu).isEqualTo(4200);
@@ -230,7 +247,10 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void calculateSumOfCalOfMenu() {
         // when
-        int sumOfCalOfMenu = menu.stream().mapToInt(Dish::getCalories).sum();
+        int sumOfCalOfMenu =
+                menu.stream()
+                        .mapToInt(Dish::getCalories)
+                        .sum();
 
         // then
         System.out.println(sumOfCalOfMenu); // 4200
@@ -244,23 +264,33 @@ public class ReducingAndSummarization_6_2 {
     @Test
     public void joiningTheStrings() {
         // when
-        String method1 = menu.stream()
-                .map(Dish::getName)
-                .collect(Collectors.reducing((s1, s2) -> s1 + s2))
-                .get();
+        String method1 =
+                menu.stream()
+                        .map(Dish::getName)
+                        .collect(reducing((s1, s2) -> s1 + s2))
+                        .get();
 
 //        String method2 = menu.stream()
 //                .collect(Collectors.reducing(((d1, d2) ->d1.getName() + d2.getName() )))
 //                .get();
 
-        String method3 = menu.stream().collect(Collectors.reducing("", Dish::getName, (s1, s2) -> s1 + "," + s2));
+        String method3 =
+                menu.stream()
+                        .collect(
+                                reducing("",
+                                        Dish::getName,
+                                        (s1, s2) -> s1 + "," + s2));
+        String method4MapReduce =
+                menu.stream()
+                        .map(Dish::getName)
+                        .reduce("", (s1, s2) -> s1 + "," + s2);
 
         // then
         System.out.println(method1); // porkbeefchickenfrench_friesriceseason fruitpizzaprawnssalmon
 //        System.out.println(method2); // 컴파일 오류
         System.out.println(method3); // ,pork,beef,chicken,french_fries,rice,season fruit,pizza,prawns,salmon
+        System.out.println(method4MapReduce); // ,pork,beef,chicken,french_fries,rice,season fruit,pizza,prawns,salmon
     }
-
 
 
 }

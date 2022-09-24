@@ -26,7 +26,10 @@ public class Grouping_6_3 {
     public void ClassifyByDishTypeRefMethod() {
 
         // when
-        Map<Dish.Type, List<Dish>> classifiedMapByDishType = menu.stream().collect(groupingBy(Dish::getType));
+        Map<Dish.Type, List<Dish>> classifiedMapByDishType =
+                menu.stream().
+                        collect(
+                                groupingBy(Dish::getType));
 
         // then
         System.out.println(classifiedMapByDishType.entrySet()); //
@@ -48,15 +51,17 @@ public class Grouping_6_3 {
     public void ClassifyByDishTypeLambda() {
         // when
         Map<CaloricLevel, List<Dish>> caloricLevelMap =
-                menu.stream().collect(groupingBy(dish -> {
-                    if (dish.getCalories() <= 400) {
-                        return CaloricLevel.DIET;
-                    } else if (dish.getCalories() <= 700) {
-                        return CaloricLevel.NORMAL;
-                    } else {
-                        return CaloricLevel.FAT;
-                    }
-                }));
+                menu.stream()
+                        .collect(
+                                groupingBy(dish -> {
+                                    if (dish.getCalories() <= 400) {
+                                        return CaloricLevel.DIET;
+                                    } else if (dish.getCalories() <= 700) {
+                                        return CaloricLevel.NORMAL;
+                                    } else {
+                                        return CaloricLevel.FAT;
+                                    }
+                                }));
 
         // then
         System.out.println(caloricLevelMap);
@@ -77,8 +82,10 @@ public class Grouping_6_3 {
     public void groupByDishTypeOver500CaloriesDish() {
         // when
         Map<Dish.Type, List<Dish>> over500CalDishGroupByMenuType =
-                menu.stream().collect(groupingBy(
-                        Dish::getType, filtering(dish -> dish.getCalories() > 500, toList())));
+                menu.stream().
+                        collect(
+                                groupingBy(Dish::getType,
+                                        filtering(dish -> dish.getCalories() > 500, toList())));
 
         // then
         System.out.println(over500CalDishGroupByMenuType); // {OTHER=[french_fries, pizza], MEAT=[pork, beef], FISH=[]}
@@ -93,7 +100,8 @@ public class Grouping_6_3 {
         // when
         Map<Dish.Type, List<String>> dishNameGroupByDishType =
                 menu.stream().collect(
-                        groupingBy(Dish::getType, mapping(Dish::getName, toList())));
+                        groupingBy(Dish::getType,
+                                mapping(Dish::getName, toList())));
 
         // then
         System.out.println(dishNameGroupByDishType);
@@ -152,18 +160,19 @@ public class Grouping_6_3 {
         // when
         Map<Dish.Type, Map<CaloricLevel, List<Dish>>> multiGroupByDish =
                 menu.stream()
-                        .collect(groupingBy(Dish::getType,
-                                groupingBy(dish -> {
-                                    if (dish.getCalories() <= 400) {
-                                        return CaloricLevel.DIET;
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        groupingBy(dish -> {
+                                            if (dish.getCalories() <= 400) {
+                                                return CaloricLevel.DIET;
 
-                                    } else if (dish.getCalories() <= 700) {
-                                        return CaloricLevel.NORMAL;
+                                            } else if (dish.getCalories() <= 700) {
+                                                return CaloricLevel.NORMAL;
 
-                                    } else {
-                                        return CaloricLevel.FAT;
-                                    }
-                                })));
+                                            } else {
+                                                return CaloricLevel.FAT;
+                                            }
+                                        })));
 
         // then
         System.out.println(multiGroupByDish);
@@ -185,8 +194,9 @@ public class Grouping_6_3 {
         // when
         Map<Dish.Type, Long> groupByAndCountingDish =
                 menu.stream()
-                        .collect(groupingBy(Dish::getType,
-                                counting()));
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        counting()));
 
         // then
         System.out.println(groupByAndCountingDish); // {MEAT=3, OTHER=4, FISH=2}
@@ -195,14 +205,15 @@ public class Grouping_6_3 {
     /**
      * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, summarizingInt())
      */
-    @DisplayName("분류한 요리들의 각 sumary된 내용들을 보고 싶어 번외로 진행")
+    @DisplayName("분류한 요리들의 각 summary -번외")
     @Test
     public void summaryOfGroupByDish() {
         // when
         Map<Dish.Type, IntSummaryStatistics> summaryOfGroupByDish =
                 menu.stream()
-                        .collect(groupingBy(Dish::getType,
-                                summarizingInt(Dish::getCalories)));
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        summarizingInt(Dish::getCalories)));
 
         // then
         System.out.println(summaryOfGroupByDish);
@@ -214,6 +225,27 @@ public class Grouping_6_3 {
     }
 
     /**
+     * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, summingInt())
+     */
+    @DisplayName("분류한 요리들의 각 합계를 구하기. - 번외")
+    @Test
+    public void sumOfGroupByDish() {
+        // when
+        Map<Dish.Type, Integer> sumOfGroupByDish =
+                menu.stream()
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        summingInt(Dish::getCalories)));
+
+        // then
+        System.out.println(sumOfGroupByDish);
+        /* 결과 값
+         * {MEAT=1900, OTHER=1550, FISH=750}
+         */
+
+    }
+
+    /**
      * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, maxBy())
      */
     @DisplayName("분류된 요리 중 최대 칼로리 값을 가진 요리를 구하기")
@@ -222,8 +254,9 @@ public class Grouping_6_3 {
         // when
         Map<Dish.Type, Optional<Dish>> maxCalOfGroupByDish =
                 menu.stream()
-                        .collect(groupingBy(Dish::getType,
-                                maxBy(Comparator.comparing(Dish::getCalories))));
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        maxBy(Comparator.comparing(Dish::getCalories))));
         // then
         System.out.println(maxCalOfGroupByDish);
         /* 결과
@@ -232,6 +265,27 @@ public class Grouping_6_3 {
          * MEAT=Optional[pork],
          * OTHER=Optional[pizza]
          * }
+         */
+    }
+
+    /**
+     * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류함수, collectAndThen(maxBy(), Optional::get)
+     */
+    @DisplayName("분류된 요리 중 최대 칼로리 값을 가진 요리를 구하기 - collectAndThen 버전")
+    @Test
+    public void maxCalOfGroupByDishUsingCollectAndThen() {
+        // when
+        Map<Dish.Type, Dish> maxCalOfGroupByDish =
+                menu.stream()
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        collectingAndThen(
+                                                maxBy(Comparator.comparing(Dish::getCalories)), Optional::get)));
+
+        // then
+        System.out.println(maxCalOfGroupByDish);
+        /* 결과 값
+         * {OTHER=pizza, MEAT=pork, FISH=salmon}
          */
     }
 
