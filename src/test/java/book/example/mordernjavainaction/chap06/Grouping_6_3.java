@@ -144,10 +144,6 @@ public class Grouping_6_3 {
     }
 
     /**
-<<<<<<< HEAD
-     * 6.3.2 다수준 그룹화 - 두 가지 이상의 기준을 동시에 적용
-     */
-=======
      * 6.3.2 다수준 그룹화 - groupBy(분류 함수,groupBy(분류 함수))
      */
     @DisplayName("요리를 다수준으로 그룹화")
@@ -238,8 +234,6 @@ public class Grouping_6_3 {
          * }
          */
     }
-
->>>>>>> 814a872fdf8eeda1f95f7efd0525120f18821446
 
 }
 
