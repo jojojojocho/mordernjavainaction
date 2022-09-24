@@ -37,7 +37,7 @@ public class Dish {
      * 5장에 추가된 메서드
      * 요리가 담긴 리스트 만들기
      */
-    public List<Dish> makeDishes(){
+    public List<Dish> makeDish(){
         return Arrays.asList(
                 new Dish("pork", false, 800, Dish.Type.MEAT),
                 new Dish("beef", false, 700, Dish.Type.MEAT),
