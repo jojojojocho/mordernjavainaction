@@ -61,7 +61,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("요리의 칼로리 총합 구하기 (Integer)")
     @Test
-    public void CalculateSumOfDishCaloriesInt() {
+    public void calculateSumOfDishCaloriesInt() {
         // when
         Integer sumOfDishCal =
                 menu.stream()
@@ -77,7 +77,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("요리의 칼로리 총합 구하기 (Long)")
     @Test
-    public void CalculateSumOfDishCaloriesLong() {
+    public void calculateSumOfDishCaloriesLong() {
         // when
         Long sumOfDishCal =
                 menu.stream()
@@ -92,7 +92,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("요리의 칼로리 총합 구하기(Double)")
     @Test
-    public void CalculateSumOfDishCaloriesDouble() {
+    public void calculateSumOfDishCaloriesDouble() {
         // when
         Double sumOfDishCal =
                 menu.stream()
@@ -108,7 +108,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("요리의 칼로리 평균 구하기(Int, Long, Double)")
     @Test
-    public void CalculateAvgOfDishCalories() {
+    public void calculateAvgOfDishCalories() {
         // when
         Double avgOfDishCalInt = menu.stream().collect(averagingInt(Dish::getCalories));
         Double avgOfDishCalLong = menu.stream().collect(averagingLong(Dish::getCalories));
@@ -173,7 +173,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("메뉴의 모든 칼로리 합계")
     @Test
-    public void CalculateSumOfDishCalories() {
+    public void calculateSumOfDishCalories() {
         // when
         Integer sumOfDishCal =
                 menu.stream()
@@ -207,7 +207,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("The sum of calories of the menu.")
     @Test
-    public void CalculateTotalCalOfMenu() {
+    public void calculateTotalCalOfMenu() {
         // when
         Integer totalCaloriesOfMenu =
                 menu.stream()
@@ -227,7 +227,7 @@ public class ReducingAndSummarization_6_2 {
      */
     @DisplayName("the sum of calories of the menu")
     @Test
-    public void CalculateSumOfCalOfMenuUsingMapAndReduce() {
+    public void calculateSumOfCalOfMenuUsingMapAndReduce() {
         // when
         Integer sumOfCalOfMenu =
                 menu.stream()

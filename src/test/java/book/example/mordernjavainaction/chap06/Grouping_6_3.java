@@ -24,7 +24,7 @@ public class Grouping_6_3 {
      */
     @DisplayName("같은 타입으로 그룹화하기. - 메서드 참조")
     @Test
-    public void ClassifyByDishTypeRefMethod() {
+    public void classifyByDishTypeRefMethod() {
 
         // when
         Map<Dish.Type, List<Dish>> classifiedMapByDishType =
