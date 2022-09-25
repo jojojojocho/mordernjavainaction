@@ -47,7 +47,7 @@ public class Grouping_6_3 {
      */
     @DisplayName("같은 타입으로 그룹화 하기. - 람다식")
     @Test
-    public void ClassifyByDishTypeLambda() {
+    public void classifyByDishTypeLambda() {
         // when
         Map<CaloricLevel, List<Dish>> caloricLevelMap =
                 menu.stream()
