@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.*;
 public class Grouping_6_3 {
 
     List<Dish> menu = new Dish().makeDish();
+    public enum CaloricLevel {DIET, NORMAL, FAT}
 
     /**
      * 6.3 그룹화 - Collectors.groupBy()
@@ -44,8 +45,6 @@ public class Grouping_6_3 {
     /**
      * 6.3 그룹화 - Collectors.groupBy()
      */
-    public enum CaloricLevel {DIET, NORMAL, FAT}
-
     @DisplayName("같은 타입으로 그룹화 하기. - 람다식")
     @Test
     public void ClassifyByDishTypeLambda() {
@@ -225,27 +224,6 @@ public class Grouping_6_3 {
     }
 
     /**
-     * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, summingInt())
-     */
-    @DisplayName("분류한 요리들의 각 합계를 구하기. - 번외")
-    @Test
-    public void sumOfGroupByDish() {
-        // when
-        Map<Dish.Type, Integer> sumOfGroupByDish =
-                menu.stream()
-                        .collect(
-                                groupingBy(Dish::getType,
-                                        summingInt(Dish::getCalories)));
-
-        // then
-        System.out.println(sumOfGroupByDish);
-        /* 결과 값
-         * {MEAT=1900, OTHER=1550, FISH=750}
-         */
-
-    }
-
-    /**
      * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, maxBy())
      */
     @DisplayName("분류된 요리 중 최대 칼로리 값을 가진 요리를 구하기")
@@ -289,5 +267,58 @@ public class Grouping_6_3 {
          */
     }
 
+
+    /**
+     * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, summingInt())
+     * - groupingBy와 함께 사용하는 다른 컬렉터 예제
+     */
+    @DisplayName("분류한 요리들의 각 합계를 구하기.")
+    @Test
+    public void sumOfGroupByDish() {
+        // when
+        Map<Dish.Type, Integer> sumOfGroupByDish =
+                menu.stream()
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        summingInt(Dish::getCalories)));
+
+        // then
+        System.out.println(sumOfGroupByDish);
+        /* 결과 값
+         * {MEAT=1900, OTHER=1550, FISH=750}
+         */
+    }
+
+    /**
+     * 6.3.3 서브그룹으로 데이터 수집 - groupBy(분류 함수, mapping())
+     * - groupingBy와 함께 사용하는 다른 컬렉터 예제
+     */
+    @DisplayName("분류한 요리들을 매핑하기")
+    @Test
+    public void mappingOfGroupByDish() {
+        // when
+        Map<Dish.Type, Set<CaloricLevel>> calLevelOfGroupByAndMappingDish =
+                menu.stream()
+                        .collect(
+                                groupingBy(Dish::getType,
+                                        mapping(dish -> {
+                                            if (dish.getCalories() <= 400) {
+                                                return CaloricLevel.DIET;
+
+                                            } else if (dish.getCalories() <= 700) {
+                                                return CaloricLevel.NORMAL;
+
+                                            } else {
+                                                return CaloricLevel.FAT;
+
+                                            }
+                                        }, toCollection(HashSet::new))));
+
+        // then
+        System.out.println(calLevelOfGroupByAndMappingDish);
+        /* 결과 값
+         * {FISH=[NORMAL, DIET], OTHER=[NORMAL, DIET], MEAT=[FAT, NORMAL, DIET]}
+         */
+    }
 }
 
