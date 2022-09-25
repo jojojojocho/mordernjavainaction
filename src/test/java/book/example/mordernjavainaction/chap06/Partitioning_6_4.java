@@ -1,6 +1,7 @@
 package book.example.mordernjavainaction.chap06;
 
 import book.example.mordernjavainaction.chap04.Dish;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
+import static book.example.mordernjavainaction.chap04.Dish.Type;
+import static book.example.mordernjavainaction.chap04.Dish.makeDish;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -19,9 +23,7 @@ import static java.util.stream.Collectors.*;
  */
 public class Partitioning_6_4 {
 
-    List<Dish> menu = new Dish().makeDish();
-
-    public enum CaloricLevel {DIET, NORMAL, FAT}
+    List<Dish> menu = makeDish();
 
     /**
      * 6.4 분할 - partitioningBy()
@@ -55,7 +57,7 @@ public class Partitioning_6_4 {
     @Test
     public void partitioningAndGroupByDish() {
         // when
-        Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishGroupbyType =
+        Map<Boolean, Map<Type, List<Dish>>> vegetarianDishGroupbyType =
                 menu.stream()
                         .collect(
                                 partitioningBy(Dish::isVegetarian,
@@ -149,6 +151,19 @@ public class Partitioning_6_4 {
          */
     }
 
+    /**
+     * 6.4.2 숫자를 소수와 비소수로 분할하기.
+     */
+    @DisplayName("소수와 비소수로 분리하기")
+    @Test
+    public void isPrime() {
+        //when
+        boolean result = IsPrime.isPrime(5);
+
+        // then
+//        Assertions.assertThat(bool).isEqualTo(false);
+        Assertions.assertThat(result).isEqualTo(true);
+    }
 
 }
 

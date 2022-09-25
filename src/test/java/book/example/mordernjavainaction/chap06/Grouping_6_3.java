@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static book.example.mordernjavainaction.chap04.Dish.*;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -16,8 +17,7 @@ import static java.util.stream.Collectors.*;
  */
 public class Grouping_6_3 {
 
-    List<Dish> menu = new Dish().makeDish();
-    public enum CaloricLevel {DIET, NORMAL, FAT}
+    List<Dish> menu = makeDish();
 
     /**
      * 6.3 그룹화 - Collectors.groupBy()
@@ -27,7 +27,7 @@ public class Grouping_6_3 {
     public void classifyByDishTypeRefMethod() {
 
         // when
-        Map<Dish.Type, List<Dish>> classifiedMapByDishType =
+        Map<Type, List<Dish>> classifiedMapByDishType =
                 menu.stream().
                         collect(
                                 groupingBy(Dish::getType));
@@ -80,7 +80,7 @@ public class Grouping_6_3 {
     @Test
     public void groupByDishTypeOver500CaloriesDish() {
         // when
-        Map<Dish.Type, List<Dish>> over500CalDishGroupByMenuType =
+        Map<Type, List<Dish>> over500CalDishGroupByMenuType =
                 menu.stream().
                         collect(
                                 groupingBy(Dish::getType,
@@ -97,7 +97,7 @@ public class Grouping_6_3 {
     @Test
     public void groupByDishTypeAndMappingDishName() {
         // when
-        Map<Dish.Type, List<String>> dishNameGroupByDishType =
+        Map<Type, List<String>> dishNameGroupByDishType =
                 menu.stream().collect(
                         groupingBy(Dish::getType,
                                 mapping(Dish::getName, toList())));
@@ -133,7 +133,7 @@ public class Grouping_6_3 {
         dishTags.put("salmon", Arrays.asList("delicious", "fresh"));
 
         // when
-        Map<Dish.Type, Set<String>> collect =
+        Map<Type, Set<String>> collect =
                 menu.stream().collect(
                         groupingBy(Dish::getType,
                                 flatMapping(dish -> dishTags.get(dish.getName()).stream(), toSet())));
@@ -157,7 +157,7 @@ public class Grouping_6_3 {
     @Test
     public void multiLevelGroupByDish() {
         // when
-        Map<Dish.Type, Map<CaloricLevel, List<Dish>>> multiGroupByDish =
+        Map<Type, Map<CaloricLevel, List<Dish>>> multiGroupByDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -191,7 +191,7 @@ public class Grouping_6_3 {
     @Test
     public void countOfGroupByDish() {
         // when
-        Map<Dish.Type, Long> groupByAndCountingDish =
+        Map<Type, Long> groupByAndCountingDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -208,7 +208,7 @@ public class Grouping_6_3 {
     @Test
     public void summaryOfGroupByDish() {
         // when
-        Map<Dish.Type, IntSummaryStatistics> summaryOfGroupByDish =
+        Map<Type, IntSummaryStatistics> summaryOfGroupByDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -230,7 +230,7 @@ public class Grouping_6_3 {
     @Test
     public void maxCalOfGroupByDish() {
         // when
-        Map<Dish.Type, Optional<Dish>> maxCalOfGroupByDish =
+        Map<Type, Optional<Dish>> maxCalOfGroupByDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -253,7 +253,7 @@ public class Grouping_6_3 {
     @Test
     public void maxCalOfGroupByDishUsingCollectAndThen() {
         // when
-        Map<Dish.Type, Dish> maxCalOfGroupByDish =
+        Map<Type, Dish> maxCalOfGroupByDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -276,7 +276,7 @@ public class Grouping_6_3 {
     @Test
     public void sumOfGroupByDish() {
         // when
-        Map<Dish.Type, Integer> sumOfGroupByDish =
+        Map<Type, Integer> sumOfGroupByDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,
@@ -297,7 +297,7 @@ public class Grouping_6_3 {
     @Test
     public void mappingOfGroupByDish() {
         // when
-        Map<Dish.Type, Set<CaloricLevel>> calLevelOfGroupByAndMappingDish =
+        Map<Type, Set<CaloricLevel>> calLevelOfGroupByAndMappingDish =
                 menu.stream()
                         .collect(
                                 groupingBy(Dish::getType,

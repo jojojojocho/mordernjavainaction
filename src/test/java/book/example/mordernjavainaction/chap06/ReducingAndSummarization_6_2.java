@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.*;
  */
 public class ReducingAndSummarization_6_2 {
 
-    List<Dish> menu = new Dish().makeDish();
+    List<Dish> menu = Dish.makeDish();
 
     /**
      * 6.2.1 스트림 값에서 최댓값과 최솟값 검색. - Collectors.maxBy()
