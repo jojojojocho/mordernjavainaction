@@ -5,4 +5,6 @@ package book.example.mordernjavainaction.chap06;
  * @since 2022-09-27
  */
 public class CollectorInterface_6_5 {
+
+
 }

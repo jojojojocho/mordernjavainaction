@@ -391,9 +391,11 @@ public class Partitioning_6_4 {
         // then
         System.out.println(groupingBy);
         /* 결과 값
-        {OTHER=[french fries, rice, season fruit, pizza],
+        {
+        OTHER=[french fries, rice, season fruit, pizza],
         MEAT=[pork, beef, chicken],
-        FISH=[prawns, salmon]}
+        FISH=[prawns, salmon]
+        }
         */
 
     }
@@ -411,8 +413,11 @@ public class Partitioning_6_4 {
 
         // then
         System.out.println(partitioningBy);
-        /*
-         * {false=[pork, beef, chicken, prawns, salmon], true=[french fries, rice, season fruit, pizza]}
+        /* 결과 값
+         * {
+         * false=[pork, beef, chicken, prawns, salmon],
+         * true=[french fries, rice, season fruit, pizza]
+         * }
          */
 
     }
