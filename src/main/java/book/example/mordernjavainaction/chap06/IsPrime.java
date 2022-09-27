@@ -11,6 +11,7 @@ public class IsPrime {
 
     /**
      * 소수를 판별하는 메서드
+     *
      * @param candidate 소수 판별하고 싶은 숫자 파라미터
      * @return 소수 판별 결과
      */
