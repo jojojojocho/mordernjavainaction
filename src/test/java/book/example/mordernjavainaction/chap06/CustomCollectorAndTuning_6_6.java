@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -49,7 +47,7 @@ public class CustomCollectorAndTuning_6_6 {
      */
     @DisplayName("커스텀 컬렉터를 이용한 소수판별")
     @Test
-    public void partitionPrimesWithCustomCollector(){
+    public void partitionPrimeNumbersWithCustomCollector(){
         // given
         int n = 1_000_000;
 
@@ -79,7 +77,7 @@ public class CustomCollectorAndTuning_6_6 {
 
         for(int i=0; i<10; i++){
             long start =System.nanoTime();
-            partitionPrimesWithCustomCollector(); // 커스텀 컬렉터를 이용한 소수분리 - 81 msecs
+            partitionPrimeNumbersWithCustomCollector(); // 커스텀 컬렉터를 이용한 소수분리 - 81 msecs
 //            classifyPrimeNumber(); // 커스텀 하지 않은 상태에서 소수 분리 -  124 msecs
             long duration = (System.nanoTime() - start) / 1_000_000;
             if(duration < fastest) fastest =duration;

@@ -10,6 +10,13 @@ import java.util.stream.Collector;
 import static book.example.mordernjavainaction.chap06.IsPrime.*;
 import static java.util.stream.Collector.Characteristics.*;
 
+/**
+ * 소수를 collect하는 구현체
+ *
+ * @author 조병상
+ * @since 2022-10-03
+ */
+
 public class PrimeNumbersCollector
         implements Collector<Integer,Map<Boolean,List<Integer>>, Map<Boolean, List<Integer>>> {
     /**
