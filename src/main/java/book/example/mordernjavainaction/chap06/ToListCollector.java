@@ -13,7 +13,7 @@ import java.util.stream.Collector;
  * @author 조병상
  * @since 2022-09-28
  *
- * @param <T>
+ * @param <T> T, Accumulator,Result
  */
 
 public class ToListCollector<T> implements Collector<T, List<T>, List<T>> {
