@@ -55,7 +55,7 @@ public class parallelStream_7_1 {
      */
     @DisplayName("전통적인 자바방식의 1부터 n까지의 합을 구하는 메서드 테스트")
     @Test
-    public void oldVersionIterator(){
+    public void oldVersionIterator() {
         // given
         long n = 10;
 
@@ -66,6 +66,23 @@ public class parallelStream_7_1 {
         Assertions.assertThat(result).isEqualTo(55L);
     }
 
-    
+    /**
+     * 7.1.1 순차 스트림을 병렬 스트림으로 변환하기
+     */
+    @DisplayName("순차스트림을 병렬 스트림으로 변환하기")
+    @Test
+    public void streamToParallel() {
+        long n = 10L;
+
+        Long result =
+                Stream.iterate(1L, i -> i + 1)
+                        .limit(n)
+                        .parallel()
+                        .reduce(0L, Long::sum);
+
+        System.out.println(result); // 55
+    }
+
+
 
 }
