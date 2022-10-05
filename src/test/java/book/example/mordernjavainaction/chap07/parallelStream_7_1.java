@@ -83,6 +83,26 @@ public class parallelStream_7_1 {
         System.out.println(result); // 55
     }
 
+    /**
+     * 7.2.2 스트림 성능 측정
+     */
+    @DisplayName("순차스트림과 병렬스트림의 성능 측정")
+    @Test
+    public void checkStreamPerformance(){
+
+        /*
+         * benchmark Test 진행한 결과 값
+         *
+         * Benchmark                                                           Mode  Cnt           Score   Error  Units
+         * sample.Sample.hello                                                thrpt    2  3868837073.346          ops/s
+         * parallelStreamBenchmark.ParallelStreamBenchmark.iterativeSum        avgt    2           2.179          ms/op
+         * parallelStreamBenchmark.ParallelStreamBenchmark.parallelRangedSum   avgt    2           0.653          ms/op
+         * parallelStreamBenchmark.ParallelStreamBenchmark.rangedSum           avgt    2           4.354          ms/op
+         * parallelStreamBenchmark.ParallelStreamBenchmark.sequential          avgt    2          50.999          ms/op
+         */
+    }
+
+
 
 
 }

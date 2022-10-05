@@ -117,23 +117,23 @@ public class TestCode {
         });
     }
 
-    @DisplayName("스트림을 이용한 내부 반복")
-    @Test
-    public void useStream() {
-        //stream을 이용한 내부반복 -> 선언형이라 가독성이 높다.
-        List<String> dishNames = menu.stream()      //menu 스트림 생성.
-                .map(Dish::getName)         //dish 객체를 dish.getname의 리턴값으로 매핑해준다.
-                .collect(toList());         //리스트로 collect
-        dishNames
-                .forEach(System.out::println);// dishNames를 순회하면서 각 요소의 이름을 출력
-
-//        AtomicInteger index = new AtomicInteger();
-        //람다식 안에서는 final 형태 즉, 변하지 않는 변수만 선언이 가능하므로 AtomicInteger 또는 배열을 사용하여 값을 변경.
-        final int[] index = {0};
-        dishNames.parallelStream().forEach(dishname -> {
-                    Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);   //순회하면서 검증
-                });
-    }
+//    @DisplayName("스트림을 이용한 내부 반복")
+//    @Test
+//    public void useStream() {
+//        //stream을 이용한 내부반복 -> 선언형이라 가독성이 높다.
+//        List<String> dishNames = menu.stream()      //menu 스트림 생성.
+//                .map(Dish::getName)         //dish 객체를 dish.getname의 리턴값으로 매핑해준다.
+//                .collect(toList());         //리스트로 collect
+//        dishNames
+//                .forEach(System.out::println);// dishNames를 순회하면서 각 요소의 이름을 출력
+//
+////        AtomicInteger index = new AtomicInteger();
+//        //람다식 안에서는 final 형태 즉, 변하지 않는 변수만 선언이 가능하므로 AtomicInteger 또는 배열을 사용하여 값을 변경.
+//        final int[] index = {0};
+//        dishNames.parallelStream().forEach(dishname -> {
+//                    Assertions.assertThat(menu.get(index[0]++).getName()).isEqualTo(dishname);   //순회하면서 검증
+//                });
+//    }
 
     @DisplayName("외부반복을 내부반복으로 변환(외부반복코드)")
     @Test
