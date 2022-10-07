@@ -37,7 +37,7 @@ public class Dish {
      * 5장에 추가된 메서드
      * 요리가 담긴 리스트 만들기
      */
-    public List<Dish> makeDish(){
+    public static List<Dish> makeDish(){
         return Arrays.asList(
                 new Dish("pork", false, 800, Dish.Type.MEAT),
                 new Dish("beef", false, 700, Dish.Type.MEAT),
@@ -50,4 +50,6 @@ public class Dish {
                 new Dish("salmon", false, 450, Dish.Type.FISH)
         );
     }
+
+    public static enum CaloricLevel {DIET, NORMAL, FAT}
 }

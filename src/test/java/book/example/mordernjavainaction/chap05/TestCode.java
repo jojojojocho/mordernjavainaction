@@ -610,26 +610,26 @@ public class TestCode {
      * 예상 되는 결과 값 : 리스트의 3의 배수 중 가장 첫번째 값의 제곱값
      * 검증 : 결과값을 sqrt 후 3으로 나누었을 때 값이 0인지 체크
      */
-    @DisplayName("첫 번째 요소 찾기")
-    @Test
-    public void findFirstElement() {
-        //given
-        List<Integer> listOfNumber = Arrays.asList(1, 2, 3, 4, 5);
-
-        //when
-        Optional<Integer> firstSquareDivisibleByThree = listOfNumber
-                .stream()
-                .filter(x -> x / 3 == 0)
-                .map(x -> x * x)
-                .findFirst();
-
-        //then
-        if (firstSquareDivisibleByThree.isPresent()) {
-            firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3).isEqualTo(0));
-        } else {
-            throw new NoSuchElementException();
-        }
-    }
+//    @DisplayName("첫 번째 요소 찾기")
+//    @Test
+//    public void findFirstElement() {
+//        //given
+//        List<Integer> listOfNumber = Arrays.asList(1, 2, 3, 4, 5);
+//
+//        //when
+//        Optional<Integer> firstSquareDivisibleByThree = listOfNumber
+//                .stream()
+//                .filter(x -> x / 3 == 0)
+//                .map(x -> x * x)
+//                .findFirst();
+//
+//        //then
+//        if (firstSquareDivisibleByThree.isPresent()) {
+//            firstSquareDivisibleByThree.ifPresent(number -> Assertions.assertThat(Math.sqrt(number) / 3).isEqualTo(0));
+//        } else {
+//            throw new NoSuchElementException();
+//        }
+//    }
 
     /*
      * 5.5 리듀싱
