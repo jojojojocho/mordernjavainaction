@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class Sample {
 
-    @Benchmark
-    public void hello(){
-
-    }
+//    @Benchmark
+//    public void hello(){
+//
+//    }
 
 //    public static void main(String[] args) throws IOException, RunnerException, RunnerException {
 //        Options opt = new OptionsBuilder()

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author 조병상
  * @since 2022-10-04
  */
-public class parallelStream_7_1 {
+public class ParallelStream_7_1 {
 
     /**
      * 1부터 n까지의 모든 숫자의 합계를 반환하는 메서드 구현
