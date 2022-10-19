@@ -13,6 +13,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * 8.1 컬렉션 팩토리
+ *
+ * @author 조병상
+ * @since 2022-10-12
+ */
 public class CollectionFactory_8_1 {
 
     /**
