@@ -77,7 +77,13 @@ public class ListAndSetProcessing_8_2 {
         }
 
         // when
-        integerList.removeIf(integer -> integer % 2 == 0);
+        integerList.removeIf(integer -> {
+            if(integer % 2 == 0){
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         // then
         integerList.forEach(integer -> Assertions.assertThat(integer)

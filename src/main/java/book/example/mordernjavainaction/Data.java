@@ -5,6 +5,7 @@ import book.example.mordernjavainaction.chap05.Trader;
 import book.example.mordernjavainaction.chap05.Transaction;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * data class
@@ -52,6 +53,19 @@ public class Data {
             new Transaction(mario, 2012, 700),
             new Transaction(alan, 2012, 950)
         );
+    }
+
+    public static Map<String, Integer> tottenhamHotspur(){
+        Map<String, Integer> totMap =
+            Map.ofEntries(
+                Map.entry("Son", 30),
+                Map.entry("Kane", 29),
+                Map.entry("Hugo", 35),
+                Map.entry("Dier", 28),
+                Map.entry("Lucas", 30),
+                Map.entry("Kulusevski", 22)
+            );
+        return totMap;
     }
 
 }
