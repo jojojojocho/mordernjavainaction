@@ -1,8 +1,8 @@
 package book.example.mordernjavainaction.chap08;
 
-import static book.example.mordernjavainaction.chap08.CacheExample.calculateDigest;
 
 import book.example.mordernjavainaction.Data;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -117,25 +117,56 @@ public class MapProcessing_8_3 {
         Assertions.assertThat(age).isEqualTo(0);
     }
 
+
+
     /**
      * 8.3.4 계산 패턴
      */
-//    @DisplayName("캐시 하기")
-//    @Test
-//    public void usingComputeIfAbsent(){
-//        // given
-//        Map<String, byte[]> dataToHash = new HashMap<>();
-//        List<String> lines = Arrays.asList(
-//            " Nel   mezzo del cammin  di nostra  vita ",
-//            "mi  ritrovai in una  selva oscura",
-//            " che la  dritta via era   smarrita "
-//        );
-//
-//        // when
-//        lines.forEach( line -> dataToHash.computeIfAbsent(line, calculateDigest(line)) );
-//
-//        // then
-//
+    @DisplayName("map에 key가 존재하지 않으면 function 실행 - computeIfAbsent")
+    @Test
+    public void usingComputeIfAbsent() throws NoSuchAlgorithmException {
+        // given
+        Map<String, byte[]> dataToHash = new HashMap<>();
+        List<String> lines = Arrays.asList(
+            " Nel   mezzo del cammin  di nostra  vita ",
+            "mi  ritrovai in una  selva oscura",
+            " che la  dritta via era   smarrita "
+        );
+
+        CacheExample cacheExample = new CacheExample();
+
+        // when
+        lines.stream().forEach(line -> {
+            dataToHash.computeIfAbsent(line, cacheExample::calculateDigest);
+        });
+
+        // then
+        System.out.println(dataToHash); //
+        /*
+         * 결과 값
+         * {
+         *  che la  dritta via era   smarrita =[B@291b4bf5,
+         *  mi  ritrovai in una  selva oscura=[B@2d2ffcb7,
+         *   Nel   mezzo del cammin  di nostra  vita =[B@762ef0ea
+         * }
+         */
+
+    }
+
+    /**
+     * 8.3.4  계산패턴
+     */
+    @DisplayName("여러 값을 저장하는 맵을 처리")
+    @Test
+    public void multipleValueSaveMap(){
+        // given
+        
+
+        // when
+
+
+        // then
+
 
     }
 
